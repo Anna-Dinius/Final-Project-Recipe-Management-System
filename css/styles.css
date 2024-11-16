@@ -1,0 +1,264 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap");
+
+body {
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+}
+
+/***************INDEX PAGE STYLES***************/
+#content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1200px) {
+  #content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  #content {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+#filter {
+  display: flex;
+  align-items: center;
+}
+#filter p {
+  display: flex;
+  align-items: center;
+  margin: auto 10px;
+}
+.hide {
+  display: none;
+}
+.card {
+  height: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 10px;
+  display: inline-block;
+  text-align: center;
+}
+.card img {
+  width: auto;
+  height: 100%;
+}
+.img-div {
+  height: 300px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.h1-div {
+  height: 96px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+.card h1 {
+  color: #000000;
+  align-items: center;
+}
+.author {
+  color: #3b3b3b;
+  padding-bottom: 10px;
+}
+.btns {
+  justify-content: space-between;
+}
+#btn-div {
+  margin: 10px auto 10px;
+  display: flex;
+  justify-content: center;
+}
+#btn-create {
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #008080;
+  border: #008080;
+}
+#input-area {
+  padding: 10px 10px 0 10px;
+}
+#btn-save {
+  background-color: #fa8072;
+  border: none;
+  font-size: 18px;
+}
+.textarea {
+  height: 1;
+}
+.btn-delete {
+  font-size: 16px;
+  padding: 8px 18px;
+  float: right;
+}
+.load-btn {
+  background-color: #fa8072;
+  color: white;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+}
+.load-btn:hover {
+  background-color: #c8665b;
+  border: #c8665b;
+}
+.load-btn:active, #load-more:active, #btns a .update-btn:active{
+	background-color: #a05148;
+}
+.modal-footer .btn-primary {
+  background-color: #008080;
+  border: #008080;
+}
+#navbarNavAltMarkup div a {
+  color: #ffffff;
+}
+#navbarNavAltMarkup div a:hover {
+  color: #cce7f3;
+}
+#navbarNavAltMarkup div a:focus {
+  color: #d3d3d3;
+}
+#navbarNavAltMarkup {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+.nav-link {
+  padding: 8px;
+}
+
+.turqoise{
+	background-color: #008080;
+}
+#create-btn{
+	background-color: #3EB489;
+	border: #3EB489;
+}
+#create-btn:hover{
+	background-color: #31906d;
+	border: #31906d;
+}
+#create-btn:active, #editBtn{
+	background-color: #277357;
+	border: #277357;
+}
+.prep_cook_time{
+	margin-bottom: 0;
+}
+.required{
+	color: red;
+}
+.signInUp{
+	margin: 10px auto;
+}
+#btn-change:hover{
+	background-color: #005959;
+}
+
+/***************DETAIL PAGE STYLES***************/
+.view_count {
+  text-align: center;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+}
+.row {
+  display: flex;
+  padding: 1rem;
+}
+.col {
+  width: 60%;
+  padding-left: 3%;
+  padding-right: 3%;
+  align-items: center;
+}
+.col h3,
+h5 {
+  margin: 5%;
+  text-align: center;
+}
+.colpic {
+  width: 40%;
+}
+.pic {
+  width: 100%;
+  margin-top: 20%;
+}
+a {
+  color: #fa8072;
+  text-decoration: none;
+}
+.centerText {
+  text-align: center;
+}
+.centerContent {
+  display: flex;
+  justify-content: center;
+}
+#editBtn{
+	background-color: #3EB489;
+	border: #3EB489;
+	float: left;
+}
+#editBtn:hover{
+	background-color: #31906d;
+	border: #31906d;
+}
+#deleteBtn{
+	float: right;
+}
+.update-btn{
+	background-color: #fa8072;
+	border: #fa8072;
+	float: left;
+}
+.update-btn:hover{
+	background-color: #c8665b;
+	border: #c8665b;
+}
+#detailBtns{
+	clear: left;
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .col {
+    width: 100%;
+  }
+
+  .colpic {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pic {
+    width: 18rem;
+  }
+}
+
