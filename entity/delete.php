@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+require_once('../db.php');
 
 session_start();
 
@@ -11,6 +12,9 @@ $id = $_GET['recipe_id'];
 $recipe = getRecipe($recipes, $id);
 
 $title = 'Delete a Recipe';
+
+#SQL Statement
+$sql = "DELETE FROM recipe WHERE recipe_ID = :ID"
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   for ($i = 0; $i < count($recipes); $i++) {
