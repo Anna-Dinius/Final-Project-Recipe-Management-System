@@ -53,11 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'steps' => $steps,
   ];
 
-  #sql statements
-  $sql = "SELECT category_ID FROM category WHERE category_name = :category";
-  $sql = "INSERT INTO recipes VALUES(:ID, :user_ID, :recipe_name, :category_ID, :prep_time_minutes, :prep_time_hours, :cook_time_minutes, :cook_time_hours, :servings, :image_file, 0)";
-  $sql = "INSERT INTO ingredients VALUES(:ID, :recipe_ID, :ingredient)";
-  $sql = "INSERT INTO steps VALUES(:order_number, :Recipe_ID, :step)";
 
   $recipes[] = $new_recipe;
   $content = json_encode($recipes, JSON_PRETTY_PRINT);
