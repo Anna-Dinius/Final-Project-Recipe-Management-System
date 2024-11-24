@@ -118,12 +118,12 @@ function updateViewCount($target_id)
 
 function allowedToEdit($author)
 {
-  if (isset($_SESSION['name'])) {
+  if (isset($_SESSION['admin'])) {
+    return true;
+  } elseif (isset($_SESSION['name'])) {
     if ($author == $_SESSION['name']) {
       return true;
     }
-  } elseif (isset($_SESSION['admin'])) {
-    return true;
   }
   return false;
 }

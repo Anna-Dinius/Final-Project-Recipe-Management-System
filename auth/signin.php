@@ -22,29 +22,30 @@ $title = 'Sign In';
         //Opens file
         $file = '../data/users.csv';
         $fp = fopen($file, 'r');
+
         //Checks for correct log in information.
         while (($data = fgetcsv($fp)) !== FALSE) {
             if ($_POST['email'] == $data[2] && $_POST['password'] == $data[3]) {
                 $fp = fclose($fp);
+
                 session_start();
                 $_SESSION['signedIn'] = TRUE;
                 $_SESSION['name'] = $data[0] . ' ' . $data[1];
 
                 $query = $db->prepare('SELECT is_admin FROM users WHERE email=? AND password=?');
-                $query = $query->execute([$data[2], $data[3]]);
+                $query->execute([$data[2], $data[3]]);
 
-                // $is_admin = $query->fetch(); // doesn't work
-    
-                if ($is_admin == 1) {
+                $is_admin = $query->fetch();
+
+                if ($is_admin['is_admin'] == 1) {
                     $_SESSION['admin'] = TRUE;
                 }
 
-                die($is_admin . ' ' . $data[2] . ' ' . $data[3]); // for debugging
-    
-                header('location:../index.php'); //Once signed in, a session is started.
+                header('location:../index.php');
                 exit();
             }
         }
+
         $fp = fclose($fp);
         header('location:signin.php');
         exit();
