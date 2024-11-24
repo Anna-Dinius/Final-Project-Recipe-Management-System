@@ -116,6 +116,18 @@ function updateViewCount($target_id)
   }
 }
 
+function allowedToEdit($author)
+{
+  if (isset($_SESSION['name'])) {
+    if ($author == $_SESSION['name']) {
+      return true;
+    }
+  } elseif (isset($_SESSION['admin'])) {
+    return true;
+  }
+  return false;
+}
+
 function displayCards($recipes)
 {
   for ($i = 0; $i < count($recipes); $i++) {
@@ -133,7 +145,7 @@ function displayCards($recipes)
         <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
       </a>
 
-      <?php if (isset($_SESSION['signedIn'])) { ?>
+      <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
         <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
           <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>"
             class="btn btn-sm btn-danger btn-delete">Delete</a>
