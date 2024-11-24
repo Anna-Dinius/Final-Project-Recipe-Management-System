@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+require_once('../db.php');
 
 session_start();
 

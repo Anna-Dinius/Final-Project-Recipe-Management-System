@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+require_once('../db.php');
 
 session_start();
 
@@ -51,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'ingredients' => $ingredients,
     'steps' => $steps,
   ];
+
 
   $recipes[] = $new_recipe;
   $content = json_encode($recipes, JSON_PRETTY_PRINT);
