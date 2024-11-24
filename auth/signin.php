@@ -17,36 +17,27 @@ $title = 'Sign In';
     <nav class="navbar navbar-expand-lg navbar-light mb-2 turqoise">
         <?= getNav(); ?>
     </nav>
+
     <?php
     if (count($_POST) > 0) {
-        //Opens file
-        $file = '../data/users.csv';
-        $fp = fopen($file, 'r');
+        $query = $db->prepare('SELECT name,is_admin FROM users WHERE email=? AND password=?');
+        $query->execute([$_POST['email'], $_POST['password']]);
 
-        //Checks for correct log in information.
-        while (($data = fgetcsv($fp)) !== FALSE) {
-            if ($_POST['email'] == $data[2] && $_POST['password'] == $data[3]) {
-                $fp = fclose($fp);
+        if ($query) {
+            $user = $query->fetch();
 
-                session_start();
-                $_SESSION['signedIn'] = TRUE;
-                $_SESSION['name'] = $data[0] . ' ' . $data[1];
+            session_start();
+            $_SESSION['signedIn'] = TRUE;
+            $_SESSION['name'] = $user['name'];
 
-                $query = $db->prepare('SELECT is_admin FROM users WHERE email=? AND password=?');
-                $query->execute([$data[2], $data[3]]);
-
-                $is_admin = $query->fetch();
-
-                if ($is_admin['is_admin'] == 1) {
-                    $_SESSION['admin'] = TRUE;
-                }
-
-                header('location:../index.php');
-                exit();
+            if ($user['is_admin'] == 1) {
+                $_SESSION['admin'] = TRUE;
             }
+
+            header('location:../index.php');
+            exit();
         }
 
-        $fp = fclose($fp);
         header('location:signin.php');
         exit();
     } else {
@@ -61,15 +52,19 @@ $title = 'Sign In';
                             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email"
                                 required placeholder="Enter email" />
                         </div>
+
                         <div class="form-group m-3">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Password" name="password"
                                 required />
                         </div>
+
                         <button id="signin" type="submit" class="btn btn-primary">
                             Sign In
                         </button>
+
                         <br><br>
+
                         <div>
                             Don't have an account?
                             <a href="signup.php">Sign up here</a>
