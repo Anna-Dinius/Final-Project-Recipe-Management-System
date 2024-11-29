@@ -59,6 +59,34 @@ function getRecipe($recipes, $id)
   return null;
 }
 
+function getSignUpForm()
+{
+  ?>
+  <div class="form-group m-3">
+    <label for="First Name">First Name</label><span class="required">*</span>
+    <input type="text" class="form-control" id="firstName" aria-describedby="firstNameHelp" name="firstName" required
+      placeholder="Enter First Name" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="Last Name">Last Name</label><span class="required">*</span>
+    <input type="text" class="form-control" id="lastName" aria-describedby="lastNameHelp" name="lastName" required
+      placeholder="Enter Last Name" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="email">Email address</label><span class="required">*</span>
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required
+      placeholder="Enter email" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="password">Password</label><span class="required">*</span>
+    <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+  </div>
+  <?php
+}
+
 $visitors_file = '../data/visitors.csv';
 
 function getViewCount($target_id)
@@ -323,4 +351,45 @@ function displayTime($type, $recipe)
   }
 
   echo $time;
+}
+
+function displayUserRows($users)
+{
+  // echo count($users);
+  foreach ($users as $user) {
+    ?>
+    <tr>
+      <td class="name"><?= $user['name'] ?></td>
+
+      <td class="status">
+        <?php
+        if ($user['is_admin'] == 1) {
+          echo 'Admin';
+        } else {
+          echo 'User';
+        }
+        ?>
+      </td>
+
+      <td>
+        <form method="PUT" action="admin.php?user_ID=<?= $user['user_ID'] ?>">
+          <button type="submit" class="btn btn-primary change-status-btn">Change Status</button>
+        </form>
+      </td>
+
+      <td>
+        <?php
+        if ($user['is_admin'] == 0) {
+          ?>
+          <form method="DELETE" action="admin.php?user_ID=<?= $user['user_ID'] ?>">
+            <button type="submit" class="btn btn-danger">Delete User</button>
+          </form>
+          <?php
+        }
+        ?>
+
+      </td>
+    </tr>
+    <?php
+  }
 }

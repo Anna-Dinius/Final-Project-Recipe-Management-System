@@ -5,6 +5,64 @@ body {
   font-size: 16px;
 }
 
+/***************ADMIN PAGE STYLES***************/
+.admin {
+  padding: 10px;
+
+  .table-container {
+    margin: 20px 0px;
+    width: fit-content;
+    border: #b0b0b0 1px solid;
+    border-radius: 6px;
+  }
+
+  tr:not(:last-of-type) {
+    border-bottom: #d5d5d5 1px solid;
+  }
+
+  thead tr {
+    border-bottom: #b0b0b0 1px solid;
+  }
+
+  td,
+  th {
+    padding: 5px 10px;
+  }
+
+  .name {
+    min-width: 150px;
+  }
+
+  .status {
+    min-width: 100px;
+  }
+
+  .change-status-btn {
+    background-color: #fa8072;
+    border: #fa8072;
+  }
+}
+
+.admin-create-user-btn {
+  margin: 10px 0px 20px 0px;
+}
+
+.admin-create-user-form {
+  margin: 20px 0 20px 0;
+  padding: 20px 20px 5px 20px;
+  border: #b0b0b0 1px solid;
+  border-radius: 6px;
+  max-width: 450px;
+}
+
+.btn-secondary {
+  height: fit-content;
+}
+
+.user-list {
+  margin-top: 30px;
+}
+
 /***************INDEX PAGE STYLES***************/
 #content {
   display: grid;
@@ -33,6 +91,11 @@ body {
   display: flex;
   align-items: center;
   margin: auto 10px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .hide {
   display: none;
@@ -149,15 +212,19 @@ body {
 .turqoise{
 	background-color: #008080;
 }
-#create-btn{
+#create-btn,
+.create-btn{
 	background-color: #3EB489;
 	border: #3EB489;
 }
-#create-btn:hover{
+#create-btn:hover,
+.create-btn:hover{
 	background-color: #31906d;
 	border: #31906d;
 }
-#create-btn:active, #editBtn{
+#create-btn:active,
+.create-btn:active,
+#editBtn{
 	background-color: #277357;
 	border: #277357;
 }

@@ -25,17 +25,21 @@ $title = 'Recipes';
 
 	<main>
 		<?php
-			//Displays Create button if the user is signed in.
-			if(isset($_SESSION['signedIn'])){
-		?>
-		<div class="d-flex ms-3">
-			<div id="create">
-				<a href="create.php" id="create-btn" class="btn btn-primary">
-					Create
-				</a>
+		//Displays Create button if the user is signed in.
+		if (isset($_SESSION['signedIn'])) {
+			?>
+			<div class="d-flex ms-3 buttons">
+				<div id="create">
+					<a href="create.php" id="create-btn" class="btn btn-primary">
+						Create
+					</a>
+				</div>
+
+				<div>
+					<a href="admin.php" class="btn manage-users">Manage Users</a>
+				</div>
 			</div>
-		</div>
-		<?php }?>
+		<?php } ?>
 
 		<div id="content">
 			<?php
