@@ -7,6 +7,10 @@ include_once('../db.php');
 $title = "Manage Users";
 $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
 
+$num_users = $db->prepare('SELECT COUNT(*) AS num_users FROM users WHERE is_admin=?');
+$num_users->execute([0]);
+$num_users = $num_users->fetch();
+
 ?>
 
 <!doctype html>
@@ -98,9 +102,11 @@ $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
         </table>
       </div>
 
-      <form method="POST" action="delete-all-users.php">
-        <button class="btn btn-danger">Delete All Users</button>
-      </form>
+      <?php if ($num_users['num_users'] > 0) { ?>
+        <form method="POST" action="delete-all-users.php">
+          <button class="btn btn-danger">Delete All Users</button>
+        </form>
+      <?php } ?>
     </div>
   </main>
 </body>
