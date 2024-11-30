@@ -11,4 +11,3 @@ if (count($_GET) > 0) {
 }
 
 header('location: admin.php');
-// die();

@@ -22,6 +22,18 @@ $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
   </nav>
 
   <main class="admin">
+    <div id="btns">
+      <a href="../entity/index.php" class="btn btn-secondary update-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left"
+          viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+        </svg>
+        Back to Index
+      </a>
+      <br><br><br>
+    </div>
+
     <h1>Manage Users</h1>
 
     <div>
@@ -86,7 +98,7 @@ $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
         </table>
       </div>
 
-      <form method="DELETE">
+      <form method="POST" action="delete-all-users.php">
         <button class="btn btn-danger">Delete All Users</button>
       </form>
     </div>
