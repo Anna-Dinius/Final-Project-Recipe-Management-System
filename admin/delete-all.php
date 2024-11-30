@@ -4,16 +4,31 @@ session_start();
 require_once("../utils/functions.php");
 require_once('../db.php');
 
-$title = "Delete All Users";
+$target = "";
 
-if (isset($_GET['confirm'])) {
-  if ($_GET['confirm'] == "delete") {
-    $query = $db->query('DELETE FROM users WHERE is_admin=0');
-    header('location: admin.php');
-    die();
+if (isset($_GET['target'])) {
+  $target = $_GET['target'];
+
+  if (isset($_GET['confirm'])) {
+    if ($_GET['confirm'] == "delete") {
+      if ($target == "user") {
+        $query = $db->query('DELETE FROM users WHERE is_admin=0');
+        header('location: admin.php');
+        die();
+      } elseif ($target == "recipe") {
+        $query = $db->query('DELETE FROM recipes');
+        $query = $db->query('DELETE FROM ingredients');
+        $query = $db->query('DELETE FROM steps');
+        header('location: ../entity/index.php');
+        die();
+      }
+    }
+
+    die("Something went wrong");
   }
 }
 
+$title = "Delete All " . $target . "s";
 ?>
 
 <!doctype html>
@@ -43,13 +58,16 @@ if (isset($_GET['confirm'])) {
           <br><br><br>
         </div>
 
-        <h2>Are you sure you want to delete every user?</h2>
-        <p>This will not delete users with Admin status.</p>
+        <h2>Are you sure you want to delete every <?= $target ?>?</h2>
+        <?php if ($target == 'user') { ?>
+          <p>This will not delete users with Admin status.</p>
+        <?php } ?>
         <p>This action cannot be undone.</p>
 
         <div class="d-flex btns">
-          <form method="POST" action="delete-all-users.php?confirm=delete">
-            <a href="admin.php" class="btn btn-secondary">Cancel</a>
+          <form method="POST" action="delete-all.php?target=<?= $target ?>&confirm=delete">
+            <a href="<?= $target == "user" ? "admin.php" : "../entity/index.php" ?>"
+              class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-sm btn-danger btn-delete">Delete</button>
           </form>
         </div>

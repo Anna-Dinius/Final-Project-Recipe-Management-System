@@ -31,7 +31,13 @@ $title = 'Recipes';
 			<div class="d-flex ms-3 buttons">
 				<div id="create">
 					<a href="create.php" id="create-btn" class="btn btn-primary">
-						Create
+						Create Recipes
+					</a>
+				</div>
+
+				<div>
+					<a href="../admin/delete-all.php?target=recipe" class="btn btn-danger">
+						Delete All Recipes
 					</a>
 				</div>
 
