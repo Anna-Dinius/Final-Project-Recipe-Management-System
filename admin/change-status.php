@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-require_once('../db.php');
-
 if (count($_POST) > 0 && isset($_GET['user_ID'])) {
+  require_once('../db.php');
+
   $id = $_GET['user_ID'];
   $is_admin = 0;
 

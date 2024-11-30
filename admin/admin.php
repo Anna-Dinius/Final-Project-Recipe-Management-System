@@ -7,24 +7,6 @@ include_once('../db.php');
 $title = "Manage Users";
 $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
 
-if (count($_POST) > 0 && isset($_GET['action'])) {
-  if ($_GET['action'] == "add") {
-    $name = $_POST['firstName'] . " " . $_POST['lastName'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $is_admin = 0;
-
-    if ($_POST['status'] == "admin") {
-      $is_admin = 1;
-    }
-
-    $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
-    $add_user->execute([$name, $email, $password, $is_admin]);
-
-    header("location: admin.php?action=view");
-  }
-}
-
 ?>
 
 <!doctype html>
@@ -47,7 +29,7 @@ if (count($_POST) > 0 && isset($_GET['action'])) {
         <a href="admin.php?action=create" class="btn btn-primary admin-create-user-btn create-btn">Create a User</a>
 
       <?php } else { ?>
-        <form class="admin-create-user-form" method="POST" action="admin.php?action=add">
+        <form class="admin-create-user-form" method="POST" action="create-user.php">
           <h2>Create a User</h2>
           <?php getSignUpForm() ?>
 

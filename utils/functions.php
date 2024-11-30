@@ -385,8 +385,8 @@ function displayUserRows($users)
         <?php
         if ($user['is_admin'] == 0) {
           ?>
-          <form method="POST" action="delete-user.php">
-            <button type="submit" name="<?= $user['user_ID'] ?>" class="btn btn-danger">Delete User</button>
+          <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
+            <button type="submit" class="btn btn-danger">Delete User</button>
           </form>
           <?php
         }
