@@ -36,7 +36,7 @@ $title = 'Recipes';
 				</div>
 
 				<div>
-					<a href="admin.php" class="btn manage-users">Manage Users</a>
+					<a href="../admin/admin.php" class="btn btn-secondary manage-users">Manage Users</a>
 				</div>
 			</div>
 		<?php } ?>

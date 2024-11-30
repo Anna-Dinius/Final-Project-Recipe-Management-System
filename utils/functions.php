@@ -360,6 +360,7 @@ function displayUserRows($users)
     ?>
     <tr>
       <td class="name"><?= $user['name'] ?></td>
+      <td class="email"><?= $user['email'] ?></td>
 
       <td class="status">
         <?php
@@ -372,8 +373,11 @@ function displayUserRows($users)
       </td>
 
       <td>
-        <form method="PUT" action="admin.php?user_ID=<?= $user['user_ID'] ?>">
-          <button type="submit" class="btn btn-primary change-status-btn">Change Status</button>
+        <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
+          <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
+            btn-primary change-status-btn">
+            Change Status
+          </button>
         </form>
       </td>
 
@@ -381,8 +385,8 @@ function displayUserRows($users)
         <?php
         if ($user['is_admin'] == 0) {
           ?>
-          <form method="DELETE" action="admin.php?user_ID=<?= $user['user_ID'] ?>">
-            <button type="submit" class="btn btn-danger">Delete User</button>
+          <form method="POST" action="delete-user.php">
+            <button type="submit" name="<?= $user['user_ID'] ?>" class="btn btn-danger">Delete User</button>
           </form>
           <?php
         }

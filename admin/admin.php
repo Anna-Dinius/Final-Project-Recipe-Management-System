@@ -1,18 +1,28 @@
 <?php
+session_start();
 
 require_once("../utils/functions.php");
 include_once('../db.php');
 
 $title = "Manage Users";
-$query = $db->query('SELECT user_ID,name,is_admin FROM users');
+$query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
 
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-  $user_ID = $_GET['user_ID'];
+if (count($_POST) > 0 && isset($_GET['action'])) {
+  if ($_GET['action'] == "add") {
+    $name = $_POST['firstName'] . " " . $_POST['lastName'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $is_admin = 0;
 
-  // $delete = $db->prepare('DELETE FROM users WHERE user_ID=?');
-  // $delete->execute($user_ID);
+    if ($_POST['status'] == "admin") {
+      $is_admin = 1;
+    }
 
-  echo "<script>alert('$user_ID');</script>";
+    $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
+    $add_user->execute([$name, $email, $password, $is_admin]);
+
+    header("location: admin.php?action=view");
+  }
 }
 
 ?>
@@ -37,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         <a href="admin.php?action=create" class="btn btn-primary admin-create-user-btn create-btn">Create a User</a>
 
       <?php } else { ?>
-        <form class="admin-create-user-form" method="POST" action="admin.php">
+        <form class="admin-create-user-form" method="POST" action="admin.php?action=add">
           <h2>Create a User</h2>
           <?php getSignUpForm() ?>
 
@@ -76,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
           <thead>
             <tr>
               <th class="name">Name</th>
+              <th class="email">Email</th>
               <th class="status">Status</th>
               <th></th>
               <th></th>
