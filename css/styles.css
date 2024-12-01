@@ -5,6 +5,10 @@ body {
   font-size: 16px;
 }
 
+button {
+  text-wrap: nowrap;
+}
+
 /***************ADMIN PAGE STYLES***************/
 .admin {
   padding: 10px;
@@ -12,8 +16,10 @@ body {
   .table-container {
     margin: 20px 0px;
     width: fit-content;
+    max-width: 100%;
     border: #b0b0b0 1px solid;
     border-radius: 6px;
+    overflow-x: scroll;
   }
 
   tr:not(:last-of-type) {
@@ -340,3 +346,20 @@ a {
   }
 }
 
+/***************CREATE/EDIT RECIPE PAGES STYLES***************/
+.total-time-input {
+  max-width: 250px;
+}
+
+.author-input {
+  max-width: 400px;
+}
+
+.del-input {
+  height: fit-content;
+  margin: 0 0 16px 10px;
+}
+
+#save-changes-btn {
+  margin-left: 20px;
+}

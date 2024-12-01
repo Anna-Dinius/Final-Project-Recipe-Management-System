@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" class="form-control" name="name" id="recipe-name" />
           </p>
 
-          <p>
+          <p class="author-input">
             <strong>Author: </strong>
             <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $author ?>" disabled />
           </p>
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
           </p>
 
-          <p>
+          <p class="total-time-input">
             <strong>Total Time: &nbsp;&nbsp;</strong><input type="text" class="form-control" name="total_time"
               id="m-total-time" disabled />
           </p>
