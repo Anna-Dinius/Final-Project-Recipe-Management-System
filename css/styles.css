@@ -19,7 +19,7 @@ button {
     max-width: 100%;
     border: #b0b0b0 1px solid;
     border-radius: 6px;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   tr:not(:last-of-type) {
@@ -101,23 +101,24 @@ button {
   }
 }
 
-#filter {
-  display: flex;
-  align-items: center;
+.no-recipes {
+  margin: 30px 20px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
 }
-#filter p {
-  display: flex;
-  align-items: center;
-  margin: auto 10px;
-}
+
 .buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .hide {
   display: none;
 }
+
 .card {
   height: auto;
   box-sizing: border-box;
@@ -126,10 +127,12 @@ button {
   display: inline-block;
   text-align: center;
 }
+
 .card img {
   width: auto;
   height: 100%;
 }
+
 .img-div {
   height: 300px;
   overflow: hidden;
@@ -138,54 +141,66 @@ button {
   justify-content: center;
   align-items: center;
 }
+
 .h1-div {
   height: 96px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px;
 }
+
 .card h1 {
   color: #000000;
   align-items: center;
 }
+
 .author {
   color: #3b3b3b;
   padding-bottom: 10px;
 }
+
 .btns {
   justify-content: space-between;
 }
+
 #btn-div {
   margin: 10px auto 10px;
   display: flex;
   justify-content: center;
 }
+
 #btn-create {
   font-size: 18px;
   padding: 10px 20px;
   background-color: #008080;
   border: #008080;
 }
+
 #input-area {
   padding: 10px 10px 0 10px;
 }
+
 #btn-save {
   background-color: #fa8072;
   border: none;
   font-size: 18px;
 }
+
 .textarea {
   height: 1;
 }
+
 .btn-delete {
   float: right;
 }
+
 .load-btn {
   background-color: #fa8072;
   color: white;
@@ -193,26 +208,33 @@ button {
   font-size: 18px;
   padding: 10px 20px;
 }
+
 .load-btn:hover {
   background-color: #c8665b;
   border: #c8665b;
 }
+
 .load-btn:active, #load-more:active, #btns a .update-btn:active{
 	background-color: #a05148;
 }
+
 .modal-footer .btn-primary {
   background-color: #008080;
   border: #008080;
 }
+
 #navbarNavAltMarkup div a {
   color: #ffffff;
 }
+
 #navbarNavAltMarkup div a:hover {
   color: #cce7f3;
 }
+
 #navbarNavAltMarkup div a:focus {
   color: #d3d3d3;
 }
+
 #navbarNavAltMarkup {
   display: flex;
   justify-content: flex-end;
@@ -221,6 +243,7 @@ button {
 .navbar-nav {
   flex-direction: row;
 }
+
 .nav-link {
   padding: 8px;
 }
@@ -228,31 +251,38 @@ button {
 .turqoise{
 	background-color: #008080;
 }
+
 #create-btn,
 .create-btn{
 	background-color: #3EB489;
 	border: #3EB489;
 }
+
 #create-btn:hover,
 .create-btn:hover{
 	background-color: #31906d;
 	border: #31906d;
 }
+
 #create-btn:active,
 .create-btn:active,
 #editBtn{
 	background-color: #277357;
 	border: #277357;
 }
+
 .prep_cook_time{
 	margin-bottom: 0;
 }
+
 .required{
 	color: red;
 }
+
 .signInUp{
 	margin: 10px auto;
 }
+
 #btn-change:hover{
 	background-color: #005959;
 }
@@ -271,56 +301,69 @@ button {
   display: flex;
   padding: 1rem;
 }
+
 .col {
   width: 60%;
   padding-left: 3%;
   padding-right: 3%;
   align-items: center;
 }
+
 .col h3,
 h5 {
   margin: 5%;
   text-align: center;
 }
+
 .colpic {
   width: 40%;
 }
+
 .pic {
   width: 100%;
   margin-top: 20%;
 }
+
 a {
   color: #fa8072;
   text-decoration: none;
 }
+
 .centerText {
   text-align: center;
 }
+
 .centerContent {
   display: flex;
   justify-content: center;
 }
+
 #editBtn{
 	background-color: #3EB489;
 	border: #3EB489;
 	float: left;
 }
+
 #editBtn:hover{
 	background-color: #31906d;
 	border: #31906d;
 }
+
 #deleteBtn{
 	float: right;
 }
+
 .update-btn{
 	background-color: #fa8072;
 	border: #fa8072;
 	float: left;
 }
+
 .update-btn:hover{
 	background-color: #c8665b;
 	border: #c8665b;
 }
+
 #detailBtns{
 	clear: left;
 }
