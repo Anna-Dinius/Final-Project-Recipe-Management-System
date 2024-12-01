@@ -1,5 +1,13 @@
 <?php
 
+function alert()
+{
+  echo "<script>
+    alert('Something went wrong. Returning you to the Home page...');
+    window.location.href = '../entity/index.php';
+  </script>";
+}
+
 function getHead($title)
 {
   ?>
@@ -25,9 +33,6 @@ function getNav()
   <div class="container-fluid">
     <a class="navbar-brand text-light" href="../entity/index.php">SavorySagas</a>
 
-    <?php
-    if (isset($_SESSION['signedIn']))
-    ?>
     <div id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <?php
@@ -175,8 +180,7 @@ function displayCards($recipes)
 
       <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
         <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-          <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>"
-            class="btn btn-sm btn-danger btn-delete">Delete</a>
+          <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
           <a href="../entity/edit.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Edit</a>
         </div>
       <?php } ?>

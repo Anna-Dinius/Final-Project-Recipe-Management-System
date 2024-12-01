@@ -25,7 +25,7 @@ $title = 'Recipes';
 
 	<main>
 		<?php
-		//Displays Create button if the user is signed in.
+		//Displays Create button if user is signed in
 		if (isset($_SESSION['signedIn'])) {
 			?>
 			<div class="d-flex ms-3 buttons">
@@ -35,22 +35,25 @@ $title = 'Recipes';
 					</a>
 				</div>
 
-				<div>
-					<a href="../admin/delete-all.php?target=recipe" class="btn btn-danger">
-						Delete All Recipes
-					</a>
-				</div>
+				<?php
+				//Displays admin buttons if user has admin status
+				if (isset($_SESSION['admin'])) {
+					?>
+					<div>
+						<a href="../admin/delete-all.php?target=recipe" class="btn btn-danger">
+							Delete All Recipes
+						</a>
+					</div>
 
-				<div>
-					<a href="../admin/admin.php" class="btn btn-secondary manage-users">Manage Users</a>
-				</div>
+					<div>
+						<a href="../admin/admin.php" class="btn btn-secondary manage-users">Manage Users</a>
+					</div>
+				<?php } ?>
 			</div>
 		<?php } ?>
 
 		<div id="content">
-			<?php
-			displayCards($recipes);
-			?>
+			<?php displayCards($recipes); ?>
 		</div>
 	</main>
 </body>

@@ -67,6 +67,14 @@ body {
   margin-right: 16px;
 }
 
+.delete-all-form {
+  width: 100%;
+}
+
+.delete-all-container {
+  max-width: 700px;
+}
+
 /***************INDEX PAGE STYLES***************/
 #content {
   display: grid;
@@ -170,8 +178,6 @@ body {
   height: 1;
 }
 .btn-delete {
-  font-size: 16px;
-  padding: 8px 18px;
   float: right;
 }
 .load-btn {
@@ -251,9 +257,10 @@ body {
 }
 
 .container {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0px;
+  max-width: 700px;
 }
+
 .row {
   display: flex;
   padding: 1rem;

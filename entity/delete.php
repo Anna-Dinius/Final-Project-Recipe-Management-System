@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="d-flex btns" id="btn-box-<?= $recipe['id'] ?>">
           <form method="POST" action="delete.php?recipe_id=<?= $_GET['recipe_id'] ?>">
             <a href="index.php" class="btn btn-secondary update-btn">Cancel</a>
-            <button type="submit" class="btn btn-sm btn-danger btn-delete">Delete</button>
+            <button type="submit" class="btn btn-danger btn-delete">Delete</button>
           </form>
         </div>
       </div>
