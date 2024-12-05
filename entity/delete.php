@@ -4,6 +4,10 @@ require_once('../db.php');
 
 session_start();
 
+if (!isset($_SESSION['signedIn'])) {
+  alert();
+  die('You do not have permission to access this page');
+} else {
 $file = '../data/recipes.json';
 $content = file_get_contents($file);
 $recipes = json_decode($content, true);
@@ -25,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   header("Location: ../entity/index.php");
 }
-
+}
 ?>
 
 <!doctype html>

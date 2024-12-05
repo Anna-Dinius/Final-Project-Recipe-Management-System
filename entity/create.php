@@ -4,6 +4,11 @@ require_once('../db.php');
 
 session_start();
 
+if (!isset($_SESSION['signedIn'])) {
+  alert();
+  die('You do not have permission to access this page');
+} else {
+
 $file = '../data/recipes.json';
 $content = file_get_contents($file);
 $recipes = json_decode($content, true);
@@ -18,7 +23,11 @@ $author = $_SESSION['name'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $name = $_POST['name'];
   $category = $_POST['category'];
-  $image = $_POST['image'];
+
+  $imagePath = '../img/' . basename($_FILES['image']['name']);
+  move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+  $image = $imagePath;
+
   $prep_time_hours = $_POST['prep_time_hours'];
   $prep_time_minutes = $_POST['prep_time_minutes'];
   $cook_time_hours = $_POST['cook_time_hours'];
@@ -53,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'steps' => $steps,
   ];
 
-
   $recipes[] = $new_recipe;
   $content = json_encode($recipes, JSON_PRETTY_PRINT);
   file_put_contents('../data/recipes.json', $content);
 
   header("Location: ../entity/detail.php?recipe_id=$id");
+}
 }
 
 ?>
@@ -90,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <br><br><br>
         </div>
 
-        <form method="POST" action="create.php" id="change-form">
+        <form enctype="multipart/form-data" method="POST" action="create.php" id="change-form">
           <p>
             <strong>Recipe Name: </strong>
             <span class="required">*</span>
@@ -186,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </p>
 
           <p>
-            <strong>Image: &nbsp;&nbsp;</strong><input class="form-control" name="image" />
+            <strong>Image: &nbsp;&nbsp;</strong><input type="file" class="form-control" name="image" accept="image/*"/>
           </p>
 
           <p>
