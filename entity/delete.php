@@ -29,7 +29,6 @@ if (!isset($_SESSION['signedIn'])) {
 
     header("Location: ../entity/index.php");
   }
-
   ?>
 
   <!doctype html>
