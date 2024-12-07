@@ -106,146 +106,6 @@ if (!isset($_SESSION['signedIn'])) {
             <br><br><br>
           </div>
 
-          <!-- <form method="POST" action="edit.php?recipe_id=<?= $_GET['recipe_id'] ?>" id="change-form">
-
-            <p>
-              <strong>Recipe Name: </strong>
-              <span class="required">*</span>
-              <input type="text" class="form-control" name="name" id="recipe-name" value="<?= $recipe['name'] ?>" />
-            </p>
-
-            <p class="author-input">
-              <strong>Author: </strong>
-              <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $recipe['author'] ?>"
-                disabled />
-            </p>
-
-            <p>
-              <strong>Category: &nbsp;&nbsp;</strong>
-              <select name="category" id="m-category">
-                <?php generateCategory($recipe); ?>
-              </select>
-            </p>
-
-            <p class="prep_cook_time">
-              <strong>Prep Time: </strong>
-              <span class="required">*</span>
-            <div style="display:flex">
-              <div>
-                &nbsp;&nbsp;Hours:&nbsp;&nbsp;
-                <br>
-                &nbsp;&nbsp;Minutes:&nbsp;&nbsp;
-              </div>
-
-              <div class="time_options">
-                <?php
-                $type = 'prep';
-                ?>
-                <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
-                  <?php
-                  $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
-                  ?>
-                </select>
-                <br>
-                <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
-                  <?php
-                  $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
-                  ?>
-                </select>
-              </div>
-            </div>
-            </p>
-
-            <p class="prep_cook_time">
-              <strong>Cook Time: </strong>
-            <div style="display:flex">
-              <div>
-                &nbsp;&nbsp;Hours:&nbsp;&nbsp;
-                <br>
-                &nbsp;&nbsp;Minutes:&nbsp;&nbsp;
-              </div>
-
-              <div class="time_options">
-                <?php
-                $type = 'cook';
-                ?>
-                <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
-                  <?php
-                  $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
-                  ?>
-                </select>
-                <br>
-                <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
-                  <?php
-                  $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
-                  ?>
-                </select>
-              </div>
-            </div>
-            </p>
-
-            <p class="total-time-input">
-              <strong>Total Time: &nbsp;&nbsp;</strong>
-              <input type="text" class="form-control" name="total_time" id="m-total-time"
-                value="<?= $recipe['total_time'] ?>" disabled />
-            </p>
-
-            <p>
-              <strong>Servings: </strong>
-              <span class="required">*</span>
-              <select name="servings" id="servingSizes">
-                <?php
-                generateServingSizes($action, $recipe);
-                ?>
-              </select>
-            </p>
-
-            <p>
-              <strong>Image: &nbsp;&nbsp;</strong><input class="form-control" name="image"
-                value="<?= $recipe['image'] ?>" />
-            </p>
-
-            <p>
-              <strong>Ingredients: </strong>
-              <span class="required">*</span>
-            <div id="m-ingredients">
-              <?php
-              generateIngredients($recipe);
-              ?>
-            </div>
-
-            <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
-            </p>
-
-            <p>
-              <strong>Steps: </strong>
-              <span class="required">*</span>
-            <div id="m-steps">
-              <?php
-              generateSteps($recipe);
-              ?>
-            </div>
-
-            <button type="button" id="add-step" class="btn btn-secondary">Add Step</button>
-            </p>
-
-            <div class="modal-footer" id="modalButton">
-              <a href="index.php" class="btn btn-secondary" id="btn-cancel">
-                Cancel
-              </a>
-
-              <a href="index.php">
-                <button type="submit" class="btn btn-primary" id="save-changes-btn">
-                  Save
-                </button>
-              </a>
-            </div>
-          </form> -->
-
           <form enctype="multipart/form-data" method="POST" action="edit.php?recipe_id=<?= $_GET['recipe_id'] ?>"
             id="change-form">
 
@@ -282,14 +142,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <?php
                 $type = 'prep';
                 ?>
-                <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
+                <select name="prep_time_hours" class="time" id="prep_time_hrs">
                   <?php
                   $time = 'hours';
                   generateTimeOptions($action, $type, $time, $recipe);
                   ?>
                 </select>
                 <br>
-                <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
+                <select name="prep_time_minutes" class="time" id="prep_time_mins">
                   <?php
                   $time = 'minutes';
                   generateTimeOptions($action, $type, $time, $recipe);
@@ -312,14 +172,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <?php
                 $type = 'cook';
                 ?>
-                <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
+                <select name="cook_time_hours" class="time" id="cook_time_hrs">
                   <?php
                   $time = 'hours';
                   generateTimeOptions($action, $type, $time, $recipe);
                   ?>
                 </select>
                 <br>
-                <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
+                <select name="cook_time_minutes" class="time" id="cook_time_mins">
                   <?php
                   $time = 'minutes';
                   generateTimeOptions($action, $type, $time, $recipe);
@@ -386,7 +246,6 @@ if (!isset($_SESSION['signedIn'])) {
             </div>
           </form>
         </div>
-
       </div>
     </main>
   </body>
