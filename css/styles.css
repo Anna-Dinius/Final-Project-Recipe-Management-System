@@ -364,6 +364,10 @@ a {
 	border: #c8665b;
 }
 
+.container.detail {
+  max-width: none;
+}
+
 #detailBtns{
 	clear: left;
 }

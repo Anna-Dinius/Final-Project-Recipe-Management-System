@@ -29,7 +29,7 @@ $title = 'Recipe Details';
 	</nav>
 
 	<main>
-		<div class="container">
+		<div class="container detail">
 			<div class="row">
 				<div id="btns">
 					<a href="index.php" class="btn btn-secondary update-btn">
