@@ -7,6 +7,6 @@ if (isset($_SESSION['signedIn'])) {
 
 session_destroy();
 
-header('Location: ../entity/index.php'); 
+header('Location: ../entity/index.php');
 exit();
 ?>

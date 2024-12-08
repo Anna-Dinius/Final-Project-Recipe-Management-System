@@ -5,16 +5,14 @@ include_once('../db.php');
 $title = 'Sign In';
 
 if (count($_POST) > 0) {
-    $query = $db->prepare('SELECT name,is_admin FROM users WHERE email=? AND password=?');
+    $query = $db->prepare('SELECT user_ID,name,is_admin,email FROM users WHERE email=? AND password=?');
     $query->execute([$_POST['email'], $_POST['password']]);
     $user = $query->fetch();
 
     if ($user) {
         startSession($user);
+        header('location: ../entity/index.php');
     }
-
-    // header('location:signin.php');
-    // exit();
 } ?>
 
 <!doctype html>

@@ -38,7 +38,8 @@ function getNav()
         <?php
         if (isset($_SESSION['signedIn'])) {
           ?>
-          <a class="nav-link" href="../auth/logout.php" id="signinBtn">Sign out</a>
+          <a class="nav-link" href="../auth/delete-account.php">Delete account</a>
+          <a class="nav-link" href="../auth/signout.php" id="signinBtn">Sign out</a>
           <?php
         } else {
           ?>
@@ -167,6 +168,8 @@ function startSession($user)
   session_start();
   $_SESSION['signedIn'] = true;
   $_SESSION['name'] = $user['name'];
+  $_SESSION['email'] = $user['email'];
+  $_SESSION['user_id'] = $user['user_ID'];
 
   if ($user['is_admin'] == 1) {
     $_SESSION['admin'] = true;
@@ -195,6 +198,21 @@ function getViewCount($target_id)
   } else {
     return 'View count not found';
   }
+}
+
+function getNumAdmins($db)
+{
+  $num_admins = $db->prepare('SELECT COUNT(*) AS num_admins FROM users WHERE is_admin=?');
+  $num_admins->execute([1]);
+  $num_admins = $num_admins->fetch();
+
+  $one_admin = 0;
+
+  if (isset($_SESSION['admin']) && $_SESSION['admin'] == true && $num_admins['num_admins'] < 2) {
+    $one_admin = 1;
+  }
+
+  return $one_admin;
 }
 
 function updateViewCount($target_id)
@@ -289,6 +307,90 @@ function displaySteps($recipe)
     <li><?= $recipe['steps'][$i] ?></li>
     <?php
   }
+}
+
+function displayTime($type, $recipe)
+{
+  $hours = $recipe[$type . '_time_hours'];
+  $minutes = $recipe[$type . '_time_minutes'];
+  $time = '';
+
+  if ($hours == 0) {
+    $hours = '';
+  } elseif ($hours == 1) {
+    $hours = $hours . ' hour';
+  } elseif ($hours > 1) {
+    $hours = $hours . ' hours';
+  }
+
+  if ($minutes == 0) {
+    $minutes = '';
+  } elseif ($minutes > 1) {
+    $minutes = $minutes . ' minutes';
+  }
+
+  if ($hours != '' && $minutes != '') {
+    $time = $hours . ', ' . $minutes;
+  } else if ($hours == '') {
+    $time = $minutes;
+  } else if ($minutes == '') {
+    $time = $hours;
+  } else {
+    $time = 'Error fetching time';
+  }
+
+  echo $time;
+}
+
+function displayUserRows($users)
+{
+  foreach ($users as $user) {
+    $current_user = 0;
+
+    if (isset($_SESSION['user_id']) && $user['user_ID'] == $_SESSION['user_id']) {
+      $current_user = 1;
+    }
+
+    ?>
+    <tr>
+      <td class="name"><?= $user['name'] ?></td>
+      <td class="email"><?= $user['email'] ?></td>
+
+      <td class="status">
+        <?php
+        if ($user['is_admin'] == 1) {
+          echo 'Admin';
+        } else {
+          echo 'User';
+        }
+        ?>
+      </td>
+
+      <td>
+        <form method="POST"
+          action="<?= $current_user == 1 ? 'change-own-status.php' : 'change-status.php?user_ID=' . $user["user_ID"] ?>">
+          <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
+            btn-primary change-status-btn">
+            Change Status
+          </button>
+        </form>
+      </td>
+
+      <td>
+        <?php
+        if ($user['is_admin'] == 0) {
+          ?>
+          <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
+            <button type="submit" class="btn btn-danger">Delete User</button>
+          </form>
+          <?php
+        }
+        ?>
+      </td>
+    </tr>
+    <?php
+  }
+
 }
 
 function generateServingSizes($action, $recipe)
@@ -406,83 +508,5 @@ function generateCategory($recipe)
       <option value="<?= $category ?>"><?= $category ?></option>
       <?php
     }
-  }
-}
-
-function displayTime($type, $recipe)
-{
-  $hours = $recipe[$type . '_time_hours'];
-  $minutes = $recipe[$type . '_time_minutes'];
-  $time = '';
-
-  if ($hours == 0) {
-    $hours = '';
-  } elseif ($hours == 1) {
-    $hours = $hours . ' hour';
-  } elseif ($hours > 1) {
-    $hours = $hours . ' hours';
-  }
-
-  if ($minutes == 0) {
-    $minutes = '';
-  } elseif ($minutes > 1) {
-    $minutes = $minutes . ' minutes';
-  }
-
-  if ($hours != '' && $minutes != '') {
-    $time = $hours . ', ' . $minutes;
-  } else if ($hours == '') {
-    $time = $minutes;
-  } else if ($minutes == '') {
-    $time = $hours;
-  } else {
-    $time = 'Error fetching time';
-  }
-
-  echo $time;
-}
-
-function displayUserRows($users)
-{
-  // echo count($users);
-  foreach ($users as $user) {
-    ?>
-    <tr>
-      <td class="name"><?= $user['name'] ?></td>
-      <td class="email"><?= $user['email'] ?></td>
-
-      <td class="status">
-        <?php
-        if ($user['is_admin'] == 1) {
-          echo 'Admin';
-        } else {
-          echo 'User';
-        }
-        ?>
-      </td>
-
-      <td>
-        <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
-          <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
-            btn-primary change-status-btn">
-            Change Status
-          </button>
-        </form>
-      </td>
-
-      <td>
-        <?php
-        if ($user['is_admin'] == 0) {
-          ?>
-          <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
-            <button type="submit" class="btn btn-danger">Delete User</button>
-          </form>
-          <?php
-        }
-        ?>
-
-      </td>
-    </tr>
-    <?php
   }
 }
