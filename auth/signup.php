@@ -11,6 +11,7 @@ if (count($_POST) > 0) {
   $fullname = $firstname . ' ' . $lastname;
   $email = trim($_POST['email']);
   $password = trim($_POST['password']);
+  $is_admin = 0;
 
   // Add data to db if email isn't already being used.
   if (validateEmail($_POST['email']) && !checkEmailExists($_POST['email'], $db)) {
@@ -19,11 +20,17 @@ if (count($_POST) > 0) {
       ':name' => $fullname,
       ':email' => $email,
       ':password' => $password,
-      ':is_admin' => 0
+      ':is_admin' => $is_admin
     ]);
 
+    $user = [
+      'name' => $fullname,
+      'is_admin' => $isadmin
+    ];
+    startSession($user);
+
     // Redirect user to sign in page.
-    header('location:signin.php?userCreated=1');
+    header('location: ../entity/index.html');
     die();
   }
 }
