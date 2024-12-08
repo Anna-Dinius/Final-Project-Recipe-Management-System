@@ -1,46 +1,31 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../db.php');
 
 $title = 'Sign Up';
 
 if (count($_POST) > 0) {
   //Grab data from $_POST.
-  $firstName = trim($_POST['firstName']);
-  $lastName = trim($_POST['lastName']);
+  $firstname = trim($_POST['firstName']);
+  $lastname = trim($_POST['lastName']);
+  $fullname = $firstname . ' ' . $lastname;
   $email = trim($_POST['email']);
   $password = trim($_POST['password']);
 
-  $data = [$firstName, $lastName, $email, $password];
+  // Add data to db if email isn't already being used.
+  if (validateEmail($_POST['email']) && !checkEmailExists($_POST['email'], $db)) {
+    $add_user = $db->prepare(query: "INSERT INTO users(name, email, password, is_admin) VALUES(:name, :email, :password, :is_admin)");
+    $add_user->execute([
+      ':name' => $fullname,
+      ':email' => $email,
+      ':password' => $password,
+      ':is_admin' => 0
+    ]);
 
-  //Flag
-  $emailNotAdded = True;
-
-  //Opening File in Append and read mode. Rewind the pointer to the beginning and then loop through the file to find the email.
-  $f = "../data/users.csv";
-  $fp = fopen($f, 'a+');
-  rewind($fp);
-
-  //Checking if email is in use
-  while ($emailNotAdded) {
-    $csvLine = fgetcsv($fp);
-    if ($csvLine == FALSE) {
-      break;
-    }
-    if ($csvLine[2] == $email) {
-      $emailNotAdded = FALSE;
-    }
+    // Redirect user to sign in page.
+    header('location:signin.php?userCreated=1');
+    die();
   }
-  //If the flag did not go off, that means the email is not in use thus the account can be added.
-  if ($emailNotAdded) {
-    fputcsv($fp, $data);
-    fclose($fp);
-    header('location:signin.php'); //Redirects user to sign in where the session start is.
-    exit();
-  } else {
-    fclose($fp);
-    header('location:signup.php'); //Redirects user to sign in where the session start is.
-  }
-  fclose($fp);
 }
 ?>
 
@@ -62,7 +47,7 @@ if (count($_POST) > 0) {
         <h2>Sign Up</h2>
 
         <form class="position-absolute top-50 start-50 translate-middle card" method="POST">
-          <?php getSignUpForm($_POST) ?>
+          <?php getSignUpForm($_POST, $db) ?>
 
           <button id="signup" type="submit" class="btn btn-primary">
             Sign up
