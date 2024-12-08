@@ -60,7 +60,95 @@ if (!isset($_SESSION['signedIn'])) {
       'ingredients' => $ingredients,
       'steps' => $steps,
     ];
+    try{
+      $db->beginTransaction();
 
+      //grab user ID
+      $sql = "SELECT user_ID FROM users WHERE name = :name";
+      $stmt = $db->prepare($sql);
+      $params = [':name' => $author];
+      $stmt->execute($params);
+      $user = $stmt->fetch();
+      $userID = $user['user_ID'];
+
+      //grab category ID
+      $sql = "SELECT category_ID FROM category WHERE category_name = :category_name";
+      $stmt = $db->prepare($sql);
+      $params = [':category_name' => $category];
+      $stmt->execute($params);
+      $categoryRow = $stmt->fetch();
+      $categoryID = $categoryRow['category_ID'];
+
+      //Recipes Insert Statement
+      //$value means that I haven't gotten their value yet.
+      $sql = "INSERT INTO recipes (user_ID, recipe_name, category_ID, prep_time_minutes, cook_time_minutes, servings, image, view_count) VALUES (:userID, :recipe_name, :category_ID, :prep_time_minutes, :cook_time_minutes, :servings, :image, :view_count)";
+      $stmt = $db->prepare($sql);
+      $params = [
+        ':userID' => $userID,
+        ':recipe_name' => $name,
+        ':category_ID' => $categoryID,
+        ':prep_time_minutes' => $prep_time_minutes,
+        ':cook_time_minutes' => $cook_time_minutes,
+        ':servings' => $servings,
+        ':image' => $imagePath,
+        ':view_count' => 0
+      ];
+      $stmt->execute($params);
+
+      //Once the recipe is inputted, we can grab the recipe ID.
+
+      $recipe_ID = $db->lastInsertId(); // Fetch the auto-incremented ID of the inserted recipe
+
+      //Steps Insert Statements
+      $sql = "INSERT INTO steps (order_number, recipe_ID, step) VALUES (:order_number, :recipe_ID, :step)";
+      $stmt = $db->prepare($sql);
+
+      $order_number = 1; // Start from step 1
+      foreach ($steps as $step) {
+          $params = [
+              ':order_number' => $order_number,
+              ':recipe_ID' => $recipe_ID, // Use the fetched recipe_ID
+              ':step' => $step // Step description
+          ];
+          $stmt->execute($params);
+          $order_number++;
+      }
+      //Ingredients
+      $selectIngredientID = "SELECT ingredients_ID FROM ingredients WHERE ingredient = :ingredient";
+      $addIngredient = "INSERT INTO ingredients (ingredient) VALUES (:ingredient)";
+      $RecipeIngredientRelationship = "INSERT INTO recipe_r_ingredients (recipe_ID, ingredient_ID) VALUES (:recipe_ID, :ingredient_ID)";
+      
+      foreach ($ingredients as $ingredient) {
+          // Check if the ingredient exists
+          $stmt = $db->prepare($selectIngredientID);
+          $stmt->execute([':ingredient' => $ingredient]);
+          $result = $stmt->fetch();
+      
+          if ($result) {
+              // Ingredient exists, get its ID
+              $ingredientID = $result['ingredients_ID'];
+          } else {
+              // Ingredient does not exist, insert it and get the new ID
+              $stmt = $db->prepare($addIngredient);
+              $stmt->execute([':ingredient' => $ingredient]);
+              $ingredientID = $db->lastInsertId();
+          }
+      
+          // Create the relationship between recipe and ingredient
+          $stmt = $db->prepare($RecipeIngredientRelationship);
+          $stmt->execute([
+              ':recipe_ID' => $recipe_ID, // Recipe ID from the earlier insert
+              ':ingredient_ID' => $ingredientID // Ingredient ID from above
+          ]);
+      }
+      
+
+
+    } catch (Exception $e) {
+      // Roll back the transaction on any failure
+      $db->rollBack();
+      echo "Transaction failed: " . $e->getMessage();
+    }
 
     $recipes[] = $new_recipe;
     $content = json_encode($recipes, JSON_PRETTY_PRINT);
