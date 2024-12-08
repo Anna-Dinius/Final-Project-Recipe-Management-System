@@ -105,13 +105,9 @@ function getSignUpForm($data, $db)
 
       <div class="required signin">
         <?php
-        // if (count($data) > 0 && isset($data['email'])) {
-        //   if (!validateEmail($data['email'])) {
-        //     echo 'Incorrect email format.';
-        //   } elseif (checkEmailExists($data['email'])) {
-        //     echo 'An account with that email already exists.';
-        //   }
-        // }
+        if (isset($_POST['password']) && !validatePassword($_POST['password'])) {
+          echo 'Password must contain:<br />- at least 8 characters<br />- one uppercase letter<br />- one lowercase letter<br />- one number.';
+        }
         ?>
       </div>
     </div>
@@ -145,6 +141,7 @@ function validateEmail($email)
 function validatePassword($password)
 {
   $validated = false;
+  $min_length = 8;
   $regex = [
     '/[A-Z]/',
     '/[a-z]/',
@@ -157,7 +154,9 @@ function validatePassword($password)
       break;
     }
 
-    $validated = true;
+    if (strlen($password) >= $min_length) {
+      $validated = true;
+    }
   }
 
   return $validated;

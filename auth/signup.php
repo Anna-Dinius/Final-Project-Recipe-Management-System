@@ -13,8 +13,11 @@ if (count($_POST) > 0) {
   $password = trim($_POST['password']);
   $is_admin = 0;
 
+  $valid_email = validateEmail($_POST['email']);
+  $valid_password = validatePassword($_POST['password']);
+
   // Add data to db if email isn't already being used.
-  if (validateEmail($_POST['email']) && !checkEmailExists($_POST['email'], $db)) {
+  if ($valid_email && $valid_password && !checkEmailExists($_POST['email'], $db)) {
     $add_user = $db->prepare(query: "INSERT INTO users(name, email, password, is_admin) VALUES(:name, :email, :password, :is_admin)");
     $add_user->execute([
       ':name' => $fullname,

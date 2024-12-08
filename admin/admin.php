@@ -36,8 +36,11 @@ if (!isset($_SESSION['admin'])) {
       $is_admin = 1;
     }
 
+    $valid_email = validateEmail($_POST['email']);
+    $valid_password = validatePassword($_POST['password']);
+
     // Add data to db if email isn't already being used.
-    if (validateEmail($_POST['email']) && !checkEmailExists($_POST['email'], $db)) {
+    if ($valid_email && $valid_password && !checkEmailExists($_POST['email'], $db)) {
       $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
       $add_user->execute([$name, $email, $password, $is_admin]);
 
