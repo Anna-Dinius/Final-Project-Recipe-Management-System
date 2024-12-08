@@ -162,6 +162,20 @@ function validatePassword($password)
   return $validated;
 }
 
+function startSession($user)
+{
+  session_start();
+  $_SESSION['signedIn'] = true;
+  $_SESSION['name'] = $user['name'];
+
+  if ($user['is_admin'] == 1) {
+    $_SESSION['admin'] = true;
+  }
+
+  header('location:../index.php');
+  exit();
+}
+
 $visitors_file = '../data/visitors.csv';
 
 function getViewCount($target_id)

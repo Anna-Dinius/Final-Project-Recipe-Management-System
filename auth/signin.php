@@ -10,16 +10,7 @@ if (count($_POST) > 0) {
     $user = $query->fetch();
 
     if ($user) {
-        session_start();
-        $_SESSION['signedIn'] = TRUE;
-        $_SESSION['name'] = $user['name'];
-
-        if ($user['is_admin'] == 1) {
-            $_SESSION['admin'] = TRUE;
-        }
-
-        header('location:../index.php');
-        exit();
+        startSession($user);
     }
 
     // header('location:signin.php');
@@ -51,7 +42,8 @@ if (count($_POST) > 0) {
 
                         <?php if (count($_POST) > 0) { ?>
                             <div class="required signin">
-                                <?= validateEmail($_POST['email']) ? 'An account with that email does not exist.' : 'Incorrect email format.' ?>
+                                <?= validateEmail($_POST['email']) ? '' : 'Incorrect email format.' ?>
+                                <?= checkEmailExists($_POST['email'], $db) ? '' : 'An account with that email does not exist.' ?>
                             </div>
                         <?php } ?>
                     </div>
