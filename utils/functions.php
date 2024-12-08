@@ -64,7 +64,24 @@ function getRecipe($recipes, $id)
   return null;
 }
 
-function getSignUpForm()
+function checkEmailExists($email)
+{
+  include_once('../db.php');
+
+  $num_users = $db->prepare('SELECT COUNT(*) AS num_users FROM users WHERE email=?');
+  $num_users->execute([$email]);
+  $num_users = $num_users->fetch();
+
+  $exists = false;
+
+  if ($num_users > 0) {
+    $exists = true;
+  }
+
+  return $exists;
+}
+
+function getSignUpForm($data)
 {
   ?>
   <div class="form-group m-3">
@@ -83,13 +100,32 @@ function getSignUpForm()
     <label for="email">Email address</label><span class="required">*</span>
     <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required
       placeholder="Enter email" />
-  </div>
 
-  <div class="form-group m-3">
-    <label for="password">Password</label><span class="required">*</span>
-    <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
-  </div>
-  <?php
+    <div class="required signin">
+      <?php
+      if (count($data) > 0) {
+        if (!validateEmail($data['email'])) {
+          echo 'Incorrect email format.';
+        } elseif (checkEmailExists($data['email'])) {
+          echo 'An account with that email already exists.';
+        }
+      }
+      ?>
+    </div>
+
+    <div class="form-group m-3">
+      <label for="password">Password</label><span class="required">*</span>
+      <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+    </div>
+    <?php
+}
+
+function validateEmail($email)
+{
+  $regex = '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+  $email = strtolower($email);
+
+  return preg_match($regex, $email);
 }
 
 $visitors_file = '../data/visitors.csv';
@@ -165,27 +201,27 @@ function displayCards($recipes)
 {
   for ($i = 0; $i < count($recipes); $i++) {
     ?>
-    <div class="card">
-      <a href="../entity/detail.php?recipe_id=<?= $recipes[$i]['id'] ?>">
-        <div class="img-div">
-          <img src="<?= $recipes[$i]['image'] ?>">
-        </div>
+      <div class="card">
+        <a href="../entity/detail.php?recipe_id=<?= $recipes[$i]['id'] ?>">
+          <div class="img-div">
+            <img src="<?= $recipes[$i]['image'] ?>">
+          </div>
 
-        <div class="h1-div">
-          <h1 class="text-truncate"><?= $recipes[$i]['name'] ?></h1>
-        </div>
+          <div class="h1-div">
+            <h1 class="text-truncate"><?= $recipes[$i]['name'] ?></h1>
+          </div>
 
-        <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
-      </a>
+          <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
+        </a>
 
-      <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
-        <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-          <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
-          <a href="../entity/edit.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Edit</a>
-        </div>
-      <?php } ?>
-    </div>
-    <?php
+        <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
+          <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
+            <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
+            <a href="../entity/edit.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Edit</a>
+          </div>
+        <?php } ?>
+      </div>
+      <?php
   }
 }
 
@@ -193,8 +229,8 @@ function displayIngredients($recipe)
 {
   for ($i = 0; $i < count($recipe['ingredients']); $i++) {
     ?>
-    <li id="item-<?= $i ?>"><?= $recipe['ingredients'][$i] ?></li>
-    <?php
+      <li id="item-<?= $i ?>"><?= $recipe['ingredients'][$i] ?></li>
+      <?php
   }
 }
 
@@ -202,8 +238,8 @@ function displaySteps($recipe)
 {
   for ($i = 0; $i < count($recipe['steps']); $i++) {
     ?>
-    <li><?= $recipe['steps'][$i] ?></li>
-    <?php
+      <li><?= $recipe['steps'][$i] ?></li>
+      <?php
   }
 }
 
@@ -214,8 +250,8 @@ function generateServingSizes($action, $recipe)
   if ($action == 'create') {
     for ($i = 0; $i <= $largestServing; $i++) {
       ?>
-      <option value="<?= $i ?>"><?= $i ?></option>
-      <?php
+        <option value="<?= $i ?>"><?= $i ?></option>
+        <?php
     }
   }
 
@@ -223,12 +259,12 @@ function generateServingSizes($action, $recipe)
     for ($i = 0; $i <= $largestServing; $i++) {
       if ($i == $recipe['servings']) {
         ?>
-        <option value="<?= $i ?>" selected><?= $i ?></option>
-        <?php
+          <option value="<?= $i ?>" selected><?= $i ?></option>
+          <?php
       } else {
         ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
+          <option value="<?= $i ?>"><?= $i ?></option>
+          <?php
       }
     }
   }
@@ -243,14 +279,14 @@ function generateTimeOptions($action, $type, $time, $recipe)
     if ($time == 'hours') {
       for ($i = 0; $i <= $maxHours; $i++) {
         ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
+          <option value="<?= $i ?>"><?= $i ?></option>
+          <?php
       }
     } elseif ($time == 'minutes') {
       for ($i = 0; $i < $maxMinutes; $i += 5) {
         ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
+          <option value="<?= $i ?>"><?= $i ?></option>
+          <?php
       }
     }
   } elseif ($action == 'edit') {
@@ -258,24 +294,24 @@ function generateTimeOptions($action, $type, $time, $recipe)
       for ($i = 0; $i <= $maxHours; $i++) {
         if ($i == $recipe[$type . '_time_hours']) {
           ?>
-          <option value="<?= $i ?>" selected><?= $i ?></option>
-          <?php
+            <option value="<?= $i ?>" selected><?= $i ?></option>
+            <?php
         } else {
           ?>
-          <option value="<?= $i ?>"><?= $i ?></option>
-          <?php
+            <option value="<?= $i ?>"><?= $i ?></option>
+            <?php
         }
       }
     } elseif ($time == 'minutes') {
       for ($i = 0; $i < $maxMinutes; $i += 5) {
         if ($i == $recipe[$type . '_time_minutes']) {
           ?>
-          <option value="<?= $i ?>" selected><?= $i ?></option>
-          <?php
+            <option value="<?= $i ?>" selected><?= $i ?></option>
+            <?php
         } else {
           ?>
-          <option value="<?= $i ?>"><?= $i ?></option>
-          <?php
+            <option value="<?= $i ?>"><?= $i ?></option>
+            <?php
         }
       }
     }
@@ -286,24 +322,25 @@ function generateSteps($recipe)
 {
   for ($i = 0; $i < count($recipe['steps']); $i++) {
     ?>
-    <div class="d-flex">
-      <textarea class="form-control mb-3 step-input" name="steps[]"
-        id="step-<?= $i + 1 ?>"><?= $recipe['steps'][$i] ?></textarea>
-      <button type="button" class="btn btn-danger del-input">X</button>
-    </div>
-    <?php
+      <div class="d-flex">
+        <textarea class="form-control mb-3 step-input" name="steps[]"
+          id="step-<?= $i + 1 ?>"><?= $recipe['steps'][$i] ?></textarea>
+        <button type="button" class="btn btn-danger del-input">X</button>
+      </div>
+      <?php
   }
 }
+
 function generateIngredients($recipe)
 {
   for ($i = 0; $i < count($recipe['ingredients']); $i++) {
     ?>
-    <div class="d-flex">
-      <input class="form-control mb-3 ingredient-input" name="ingredients[]" id="ingredient-<?= $i + 1 ?>"
-        value="<?= $recipe['ingredients'][$i] ?>" />
-      <button type="button" class="btn btn-danger del-input">X</button>
-    </div>
-    <?php
+      <div class="d-flex">
+        <input class="form-control mb-3 ingredient-input" name="ingredients[]" id="ingredient-<?= $i + 1 ?>"
+          value="<?= $recipe['ingredients'][$i] ?>" />
+        <button type="button" class="btn btn-danger del-input">X</button>
+      </div>
+      <?php
   }
 }
 
@@ -314,12 +351,12 @@ function generateCategory($recipe)
   foreach ($categories as $category) {
     if ($recipe['category'] == $category) {
       ?>
-      <option value="<?= $category ?>" selected><?= $category ?></option>
-      <?php
+        <option value="<?= $category ?>" selected><?= $category ?></option>
+        <?php
     } else {
       ?>
-      <option value="<?= $category ?>"><?= $category ?></option>
-      <?php
+        <option value="<?= $category ?>"><?= $category ?></option>
+        <?php
     }
   }
 }
@@ -362,42 +399,42 @@ function displayUserRows($users)
   // echo count($users);
   foreach ($users as $user) {
     ?>
-    <tr>
-      <td class="name"><?= $user['name'] ?></td>
-      <td class="email"><?= $user['email'] ?></td>
+      <tr>
+        <td class="name"><?= $user['name'] ?></td>
+        <td class="email"><?= $user['email'] ?></td>
 
-      <td class="status">
-        <?php
-        if ($user['is_admin'] == 1) {
-          echo 'Admin';
-        } else {
-          echo 'User';
-        }
-        ?>
-      </td>
-
-      <td>
-        <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
-          <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
-            btn-primary change-status-btn">
-            Change Status
-          </button>
-        </form>
-      </td>
-
-      <td>
-        <?php
-        if ($user['is_admin'] == 0) {
-          ?>
-          <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
-            <button type="submit" class="btn btn-danger">Delete User</button>
-          </form>
+        <td class="status">
           <?php
-        }
-        ?>
+          if ($user['is_admin'] == 1) {
+            echo 'Admin';
+          } else {
+            echo 'User';
+          }
+          ?>
+        </td>
 
-      </td>
-    </tr>
-    <?php
+        <td>
+          <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
+            <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
+            btn-primary change-status-btn">
+              Change Status
+            </button>
+          </form>
+        </td>
+
+        <td>
+          <?php
+          if ($user['is_admin'] == 0) {
+            ?>
+            <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
+              <button type="submit" class="btn btn-danger">Delete User</button>
+            </form>
+            <?php
+          }
+          ?>
+
+        </td>
+      </tr>
+      <?php
   }
 }

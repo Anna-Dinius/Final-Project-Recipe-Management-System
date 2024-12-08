@@ -53,7 +53,7 @@ if (!isset($_SESSION['admin'])) {
         <?php } else { ?>
           <form class="admin-create-user-form" method="POST" action="create-user.php">
             <h2>Create a User</h2>
-            <?php getSignUpForm() ?>
+            <?php getSignUpForm($_POST) ?>
 
             <div class="form-group m-3">
               <label for="Status">Status</label><span class="required">*</span>

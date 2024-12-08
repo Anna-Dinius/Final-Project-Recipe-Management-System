@@ -279,6 +279,10 @@ button {
 	color: red;
 }
 
+.signin {
+  font-size: 12px;
+}
+
 .signInUp{
 	margin: 10px auto;
 }
