@@ -1,4 +1,4 @@
-<?php //This file unsets the signed in data and destroys the session.
+<?php
 session_start();
 
 if (isset($_SESSION['signedIn'])) {

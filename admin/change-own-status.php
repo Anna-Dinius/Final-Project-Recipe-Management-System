@@ -8,13 +8,6 @@ if (!isset($_SESSION['admin'])) {
   include_once('../utils/functions.php');
 
   $title = 'Change Admin Status';
-
-  // if (count($_POST) > 0 && isset($_SESSION['user_id']) && isset($_POST['confirm'])) {
-  //   require_once('../db.php');
-
-  //   header('location: change-status.php?user_ID=' . $_SESSION["user_id"] . '&target=current');
-  //   exit();
-  // }
   ?>
 
   <!doctype html>
