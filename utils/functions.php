@@ -140,7 +140,7 @@ function validateEmail($email)
 
 function validatePassword($password)
 {
-  $validated = false;
+  $validated = 0;
   $min_length = 8;
   $regex = [
     '/[A-Z]/',
@@ -150,12 +150,12 @@ function validatePassword($password)
 
   foreach ($regex as $expression) {
     if (!preg_match($expression, $password)) {
-      $validated = false;
+      $validated = 0;
       break;
     }
 
     if (strlen($password) >= $min_length) {
-      $validated = true;
+      $validated = 1;
     }
   }
 

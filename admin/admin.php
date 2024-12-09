@@ -9,43 +9,44 @@ if (!isset($_SESSION['admin'])) {
   include_once('../db.php');
 
   $title = "Manage Users";
+  $showForm;
+
   $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
-  $user_added = false;
-  $showForm = false;
+
+  if (isset($_GET['form']) && $_GET['form'] == 'open') {
+    $showForm = 1;
+  } else {
+    $showForm = 0;
+  }
 
   $num_users = $db->prepare('SELECT COUNT(*) AS num_users FROM users WHERE is_admin=?');
   $num_users->execute([0]);
   $num_users = $num_users->fetch();
 
   if (count($_POST) > 0) {
-    if (isset($_POST['show-form'])) {
-      $showForm = true;
-    } else {
-      $showForm = false;
-    }
-  }
+    if (isset($_POST['add-user'])) {
+      //Grab data from $_POST.
+      $name = $_POST['firstName'] . " " . $_POST['lastName'];
+      $email = $_POST['email'];
+      $password = (string) $_POST['password'];
+      $is_admin = 0;
 
-  if (count($_POST) > 0 && isset($_POST['add-user'])) {
-    //Grab data from $_POST.
-    $name = $_POST['firstName'] . " " . $_POST['lastName'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $is_admin = 0;
+      if ($_POST['status'] == "admin") {
+        $is_admin = 1;
+      }
 
-    if ($_POST['status'] == "admin") {
-      $is_admin = 1;
-    }
+      $valid_email = validateEmail($_POST['email']);
+      $valid_password = validatePassword($password);
 
-    $valid_email = validateEmail($_POST['email']);
-    $valid_password = validatePassword($_POST['password']);
+      // Add data to db if email isn't already being used and email and password have correct format.
+      if ($valid_email == 1 && $valid_password == 1 && !checkEmailExists($_POST['email'], $db)) {
+        $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
+        $add_user->execute([$name, $email, $password, $is_admin]);
 
-    // Add data to db if email isn't already being used.
-    if ($valid_email && $valid_password && !checkEmailExists($_POST['email'], $db)) {
-      $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
-      $add_user->execute([$name, $email, $password, $is_admin]);
+        $showForm = 0;
 
-      $user_added = true;
-      header('location: admin.php');
+        header('location: admin.php?user=added');
+      }
     }
   }
   ?>
@@ -79,15 +80,19 @@ if (!isset($_SESSION['admin'])) {
 
       <div>
         <!-- Displays Create btn if Create form is not visible -->
-        <?php if (!$showForm) { ?>
-          <form method="POST">
-            <button type="submit" name="show-form" class="btn btn-primary admin-create-user-btn create-btn">Create a
-              User</button>
+        <?php if ($showForm == 0) {
+          ?>
+          <form method="POST" action="admin.php?form=open">
+            <button type="submit" class="btn btn-primary admin-create-user-btn create-btn">
+              Create a User
+            </button>
           </form>
+
           <!-- Displays Create form if Create btn is not visible -->
         <?php } else { ?>
           <form class="admin-create-user-form" method="POST">
             <h2>Create a User</h2>
+
             <?php getSignUpForm($_POST, $db) ?>
 
             <div class="form-group m-3">
@@ -121,7 +126,7 @@ if (!isset($_SESSION['admin'])) {
         <h2 class="user-list">User List</h2>
 
         <div>
-          <?= $user_added ? 'User added successfully.' : '' ?>
+          <?= isset($_GET['user']) && $_GET['user'] == 'added' ? 'User added successfully.' : '' ?>
         </div>
 
         <div class="table-container">
@@ -147,7 +152,8 @@ if (!isset($_SESSION['admin'])) {
           </table>
         </div>
 
-        <?php if ($num_users['num_users'] > 0) { ?>
+        <!-- Shows btn if there is more than 1 user with User status -->
+        <?php if ($num_users['num_users'] > 1) { ?>
           <form method="POST" action="delete-all.php?target=user">
             <button class="btn btn-danger">Delete All Users</button>
           </form>
