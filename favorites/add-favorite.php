@@ -12,7 +12,8 @@ if (!isset($_SESSION['signedIn'])) {
 
   $id = $_GET['recipe_id'];
   
-  $recipies = fetchRecipies();
+  $recipies = fetchRecipies($db);
+  $getRecipies($recipies, $id);
 
   $title = 'Add a Recipe';
 
