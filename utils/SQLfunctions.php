@@ -50,8 +50,12 @@ function getViewCountSQL($db, $recipeID)
         $stmt = $db->prepare($sql);
         
         $stmt->execute([':recipeID' => $recipeID]);
+        $view = $stmt->fetch();
+
+        return $view ? $view['view_count'] : 'Unknown';
     } catch (Exception $e) {
         echo "Error updating view count: " . $e->getMessage();
+        return 'Unknown';
     }
 }
 
