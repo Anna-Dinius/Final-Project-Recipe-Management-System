@@ -21,7 +21,7 @@ if (!isset($_SESSION['signedIn'])) {
         exit();
     } elseif ($one_admin) {
         echo '<script>
-            alert("You are the only admin. Promote another user to admin status before deleting your account.");
+            alert("You are the only Admin. Promote another user to Admin status before deleting your account.");
             window.location.href = "../entity/index.php";
         </script>';
         die();

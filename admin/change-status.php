@@ -31,7 +31,7 @@ if (!isset($_SESSION['admin'])) {
 
       if ($one_admin) {
         echo '<script>
-            alert("You are the only admin. Promote another user to admin status before changing your Admin status.");
+            alert("You are the only Admin. Promote another user to Admin status before changing your Admin status.");
             window.location.href = "../entity/index.php";
         </script>';
         die();
