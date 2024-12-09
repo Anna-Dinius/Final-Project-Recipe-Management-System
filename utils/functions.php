@@ -189,23 +189,24 @@ function displayCards($recipes)
   }
 }
 
-function displayIngredients($recipe)
+function displayIngredients($ingredients)
 {
-  for ($i = 0; $i < count($recipe['ingredients']); $i++) {
-    ?>
-    <li id="item-<?= $i ?>"><?= $recipe['ingredients'][$i] ?></li>
-    <?php
-  }
+    foreach ($ingredients as $index => $ingredient) {
+        ?>
+        <li id="item-<?= $index ?>"><?= $ingredient['ingredient'] ?></li>
+        <?php
+    }
 }
 
-function displaySteps($recipe)
+function displaySteps($steps)
 {
-  for ($i = 0; $i < count($recipe['steps']); $i++) {
-    ?>
-    <li><?= $recipe['steps'][$i] ?></li>
-    <?php
-  }
+    foreach ($steps as $index => $step) {
+        ?>
+        <li id="item-<?= $index ?>"><?= $step['step'] ?></li>
+        <?php
+    }
 }
+
 
 function generateServingSizes($action, $recipe)
 {
@@ -324,10 +325,10 @@ function generateCategory($recipe)
   }
 }
 
-function displayTime($type, $recipe)
+function displayTime($totalMinutes)
 {
-  $hours = $recipe[$type . '_time_hours'];
-  $minutes = $recipe[$type . '_time_minutes'];
+  $hours = intdiv($totalMinutes, 60); // Calculate full hours
+  $minutes = $totalMinutes % 60; // Get remaining minutes after dividing by 60
   $time = '';
 
   if ($hours == 0) {
@@ -340,22 +341,25 @@ function displayTime($type, $recipe)
 
   if ($minutes == 0) {
     $minutes = '';
+  } elseif ($minutes == 1) {
+    $minutes = $minutes . ' minute';
   } elseif ($minutes > 1) {
     $minutes = $minutes . ' minutes';
   }
 
   if ($hours != '' && $minutes != '') {
     $time = $hours . ', ' . $minutes;
-  } else if ($hours == '') {
+  } elseif ($hours == '') {
     $time = $minutes;
-  } else if ($minutes == '') {
+  } elseif ($minutes == '') {
     $time = $hours;
   } else {
     $time = 'Error fetching time';
   }
 
-  echo $time;
+    echo $time;
 }
+
 
 function displayUserRows($users)
 {

@@ -1,16 +1,27 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
+include_once('../db.php');
 
 session_start();
 
-$file = '../data/recipes.json';
-$content = file_get_contents($file);
-$recipes = json_decode($content, true);
 
-$id = $_GET['recipe_id'];
-$recipe = getRecipe($recipes, $id);
+$recipeID = $_GET['recipe_id'];
 
-updateViewCount($id);
+updateViewCountSQL($db, $recipeID);
+
+$image = fetchRecipeImagePath($db, $recipeID);
+$recipeName = fetchRecipeName($db, $recipeID);
+$author = fetchRecipeAuthor($db, $recipeID);
+$category = fetchRecipeCategory($db, $recipeID);
+
+$prepTime =  fetchRecipeCookTime($db, $recipeID);
+$cookTime =  fetchRecipeCookTime($db, $recipeID);
+$totalTime = $prepTime + $cookTime;
+
+$steps = fetchRecipeSteps($db, $recipeID);
+$ingredients = fetchRecipeIngredients($db, $recipeID);
+$servings = fetchRecipeServings($db, $recipeID);
 
 $title = 'Recipe Details';
 
@@ -44,42 +55,42 @@ $title = 'Recipe Details';
 				</div>
 
 				<div class="colpic">
-					<img class="pic" src="<?= $recipe['image'] ?>" alt="Recipe photo" id="photo" />
+					<img class="pic" src="<?= $image ?>" alt="Recipe photo" id="photo" />
 				</div>
 
 				<div class="col">
 					<h3 id="name">
-						<?= $recipe['name'] ?>
+						<?= $recipeName ?>
 					</h3>
-					<p class="view_count">Total views: <?= getViewCount($id) ?></p>
+					<p class="view_count">Total views: <?= getViewCountSQL($db, $recipeID) ?></p>
 					<h3 id="author">
-						By: <?= $recipe['author'] ?>
+						By: <?= $author ?>
 					</h3>
 
 					<div class="d-flex justify-content-center flex-column">
 						<div class="fw-bold text-center">Category:</div>
 						<div id="category" class="text-center">
-							<?= $recipe['category'] ?>
+							<?= $category ?>
 						</div>
 
 						<div class="fw-bold text-center">Prep Time:</div>
 						<div id="prep_time" class="text-center">
-							<?php displayTime('prep', $recipe); ?>
+							<?php displayTime($prepTime); ?>
 						</div>
 
 						<div class="fw-bold text-center">Cook Time:</div>
 						<div id="cook_time" class="text-center">
-							<?php displayTime('cook', $recipe); ?>
+							<?php displayTime($cookTime); ?>
 						</div>
 
 						<div class="fw-bold text-center">Total Time:</div>
 						<div id="total_time" class="text-center">
-							<?= $recipe['total_time'] ?>
+							<?php displayTime($totalTime) ?>
 						</div>
 
 						<div class="fw-bold text-center">Servings:</div>
 						<div id="servings" class="text-center">
-							<?= $recipe['servings'] ?>
+							<?= $servings ?>
 						</div>
 					</div>
 
@@ -87,7 +98,7 @@ $title = 'Recipe Details';
 					<div class="centerContent">
 						<ul id="ingredients">
 							<?php
-							displayIngredients($recipe);
+							displayIngredients($ingredients);
 							?>
 						</ul>
 					</div>
@@ -96,7 +107,7 @@ $title = 'Recipe Details';
 					<div class="centerContent">
 						<ol id="steps">
 							<?php
-							displaySteps($recipe);
+							displaySteps($steps);
 							?>
 						</ol>
 					</div>
