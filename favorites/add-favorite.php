@@ -15,9 +15,22 @@ if (!isset($_SESSION['signedIn'])) {
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //implement SQL queries to add user_ID and recipe_ID to the favorites table
+    $db->beginTransaction();
+    $query = $db->prepare('SELECT user_ID FROM users WHERE name=?');
+    $query->execute([$_SESSION['name']]);
+    $user_ID = $query->fetch();
+    $id = $_GET['recipe_id'];
+    $sql = 'INSERT INTO favorites (user_ID, recipe_ID) VALUES (:userID, :recipeID)';
+    $stmt = $db->prepare($sql);
+    $params = [
+        ':userID' => $userID,
+        ':recipe_ID' => $id
+      ];
+    $sql->execute();
 
     header("Location: ../favorites/index.php");
   }
+
   ?>
 
   <!doctype html>
