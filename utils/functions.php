@@ -1,5 +1,13 @@
 <?php
 
+function alert()
+{
+  echo "<script>
+    alert('Something went wrong. Returning you to the Home page...');
+    window.location.href = '../entity/index.php';
+  </script>";
+}
+
 function getHead($title)
 {
   ?>
@@ -25,9 +33,6 @@ function getNav()
   <div class="container-fluid">
     <a class="navbar-brand text-light" href="../entity/index.php">SavorySagas</a>
 
-    <?php
-    if (isset($_SESSION['signedIn']))
-    ?>
     <div id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <?php
@@ -57,6 +62,34 @@ function getRecipe($recipes, $id)
   }
 
   return null;
+}
+
+function getSignUpForm()
+{
+  ?>
+  <div class="form-group m-3">
+    <label for="First Name">First Name</label><span class="required">*</span>
+    <input type="text" class="form-control" id="firstName" aria-describedby="firstNameHelp" name="firstName" required
+      placeholder="Enter First Name" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="Last Name">Last Name</label><span class="required">*</span>
+    <input type="text" class="form-control" id="lastName" aria-describedby="lastNameHelp" name="lastName" required
+      placeholder="Enter Last Name" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="email">Email address</label><span class="required">*</span>
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required
+      placeholder="Enter email" />
+  </div>
+
+  <div class="form-group m-3">
+    <label for="password">Password</label><span class="required">*</span>
+    <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+  </div>
+  <?php
 }
 
 $visitors_file = '../data/visitors.csv';
@@ -116,6 +149,18 @@ function updateViewCount($target_id)
   }
 }
 
+function allowedToEdit($author)
+{
+  if (isset($_SESSION['admin'])) {
+    return true;
+  } elseif (isset($_SESSION['name'])) {
+    if ($author == $_SESSION['name']) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function displayCards($recipes)
 {
   for ($i = 0; $i < count($recipes); $i++) {
@@ -133,10 +178,9 @@ function displayCards($recipes)
         <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
       </a>
 
-      <?php if (isset($_SESSION['signedIn'])) { ?>
+      <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
         <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-          <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>"
-            class="btn btn-sm btn-danger btn-delete">Delete</a>
+          <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
           <a href="../entity/edit.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Edit</a>
         </div>
       <?php } ?>
@@ -311,4 +355,49 @@ function displayTime($type, $recipe)
   }
 
   echo $time;
+}
+
+function displayUserRows($users)
+{
+  // echo count($users);
+  foreach ($users as $user) {
+    ?>
+    <tr>
+      <td class="name"><?= $user['name'] ?></td>
+      <td class="email"><?= $user['email'] ?></td>
+
+      <td class="status">
+        <?php
+        if ($user['is_admin'] == 1) {
+          echo 'Admin';
+        } else {
+          echo 'User';
+        }
+        ?>
+      </td>
+
+      <td>
+        <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
+          <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
+            btn-primary change-status-btn">
+            Change Status
+          </button>
+        </form>
+      </td>
+
+      <td>
+        <?php
+        if ($user['is_admin'] == 0) {
+          ?>
+          <form method="POST" action="delete-user.php?user_ID=<?= $user['user_ID'] ?>">
+            <button type="submit" class="btn btn-danger">Delete User</button>
+          </form>
+          <?php
+        }
+        ?>
+
+      </td>
+    </tr>
+    <?php
+  }
 }
