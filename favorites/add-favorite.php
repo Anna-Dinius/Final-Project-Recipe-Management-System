@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
 require_once('../db.php');
 
 session_start();
@@ -10,6 +11,8 @@ if (!isset($_SESSION['signedIn'])) {
 } else {
 
   $id = $_GET['recipe_id'];
+  
+  $recipies = fetchRecipies();
 
   $title = 'Add a Recipe';
 
