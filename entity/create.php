@@ -8,9 +8,6 @@ if (!isset($_SESSION['signedIn'])) {
   alert();
   die('You do not have permission to access this page');
 } else {
-  $file = '../data/recipes.json';
-  $content = file_get_contents($file);
-  $recipes = json_decode($content, true);
 
   $action = 'create';
   $recipe = null;
@@ -26,47 +23,109 @@ if (!isset($_SESSION['signedIn'])) {
     $imagePath = '../img/' . basename($_FILES['image']['name']);
     move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
     $image = $imagePath;
-
-    $prep_time_hours = $_POST['prep_time_hours'];
-    $prep_time_minutes = $_POST['prep_time_minutes'];
-    $cook_time_hours = $_POST['cook_time_hours'];
-    $cook_time_minutes = $_POST['cook_time_minutes'];
-    $servings = $_POST['servings'];
+    
+    $prep_time_hours = (int)$_POST['prep_time_hours'];
+    $prep_time_minutes = (int)$_POST['prep_time_minutes'];
+    $cook_time_hours = (int)$_POST['cook_time_hours'];
+    $cook_time_minutes = (int)$_POST['cook_time_minutes'];
+    $servings = (int)$_POST['servings'];
     $ingredients = $_POST['ingredients'];
     $steps = $_POST['steps'];
+    try{
+      $db->beginTransaction();
 
-    $total_time_hours = $prep_time_hours + $cook_time_hours;
-    $total_time_minutes = $prep_time_minutes + $cook_time_minutes;
+      //grab user ID
+      $sql = "SELECT user_ID FROM users WHERE name = :name";
+      $stmt = $db->prepare($sql);
+      $params = [':name' => $author];
+      $stmt->execute($params);
+      $user = $stmt->fetch();
+      $userID = $user['user_ID'];
 
-    if ($total_time_minutes >= 60) {
-      $total_time_hours++;
-      $total_time_minutes = $total_time_minutes % 60;
+      //grab category ID
+      $sql = "SELECT category_ID FROM category WHERE category_name = :category_name";
+      $stmt = $db->prepare($sql);
+      $params = [':category_name' => $category];
+      $stmt->execute($params);
+      $categoryRow = $stmt->fetch();
+      $categoryID = $categoryRow['category_ID'];
+
+      //Recipes Insert Statement
+      //$value means that I haven't gotten their value yet.
+
+      $prep_time_total = $prep_time_minutes + $prep_time_hours * 60;
+      $cook_time_total = $cook_time_minutes + $cook_time_hours * 60;
+      $sql = "INSERT INTO recipes (user_ID, recipe_name, category_ID, prep_time_minutes, cook_time_minutes, servings, image, view_count) VALUES (:userID, :recipe_name, :category_ID, :prep_time_minutes, :cook_time_minutes, :servings, :image, :view_count)";
+      $stmt = $db->prepare($sql);
+      $params = [
+        ':userID' => $userID,
+        ':recipe_name' => $name,
+        ':category_ID' => $categoryID,
+        ':prep_time_minutes' => $prep_time_total,
+        ':cook_time_minutes' => $cook_time_total,
+        ':servings' => $servings,
+        ':image' => $imagePath,
+        ':view_count' => 0
+      ];
+      $stmt->execute($params);
+
+      //Once the recipe is inputted, we can grab the recipe ID.
+
+      $recipe_ID = $db->lastInsertId(); // Fetch the auto-incremented ID of the inserted recipe
+
+      //Steps Insert Statements
+      $sql = "INSERT INTO steps (order_number, recipe_ID, step) VALUES (:order_number, :recipe_ID, :step)";
+      $stmt = $db->prepare($sql);
+
+      $order_number = 1; // Start from step 1
+      foreach ($steps as $step) {
+          $params = [
+              ':order_number' => $order_number,
+              ':recipe_ID' => $recipe_ID, // Use the fetched recipe_ID
+              ':step' => $step // Step description
+          ];
+          $stmt->execute($params);
+          $order_number++;
+      }
+      //Ingredients
+      $selectIngredientID = "SELECT ingredients_ID FROM ingredients WHERE ingredient = :ingredient";
+      $addIngredient = "INSERT INTO ingredients (ingredient) VALUES (:ingredient)";
+      $RecipeIngredientRelationship = "INSERT INTO recipe_r_ingredients (recipe_ID, ingredient_ID) VALUES (:recipe_ID, :ingredient_ID)";
+      
+      foreach ($ingredients as $ingredient) {
+          // Check if the ingredient exists
+          $stmt = $db->prepare($selectIngredientID);
+          $stmt->execute([':ingredient' => $ingredient]);
+          $result = $stmt->fetch();
+      
+          if ($result) {
+              // Ingredient exists, get its ID
+              $ingredientID = $result['ingredients_ID'];
+          } else {
+              // Ingredient does not exist, insert it and get the new ID
+              $stmt = $db->prepare($addIngredient);
+              $stmt->execute([':ingredient' => $ingredient]);
+              $ingredientID = $db->lastInsertId();
+          }
+      
+          // Create the relationship between recipe and ingredient
+          $stmt = $db->prepare($RecipeIngredientRelationship);
+          $stmt->execute([
+              ':recipe_ID' => $recipe_ID, // Recipe ID from the earlier insert
+              ':ingredient_ID' => $ingredientID // Ingredient ID from above
+          ]);
+      }
+
+      $db->commit();
+      
+    } catch (Exception $e) {
+      // Roll back the transaction on any failure
+      $db->rollBack();
+      echo "Transaction failed: " . $e->getMessage();
     }
 
-    $id = count($recipes) + 1;
-
-    $new_recipe = [
-      'id' => $id,
-      'name' => $name,
-      'author' => $author,
-      'category' => $category,
-      'image' => $image,
-      'prep_time_hours' => $prep_time_hours,
-      'prep_time_minutes' => $prep_time_minutes,
-      'cook_time_hours' => $cook_time_hours,
-      'cook_time_minutes' => $cook_time_minutes,
-      'total_time' => "{$total_time_hours} hours {$total_time_minutes} minutes",
-      'servings' => $servings,
-      'ingredients' => $ingredients,
-      'steps' => $steps,
-    ];
-
-
-    $recipes[] = $new_recipe;
-    $content = json_encode($recipes, JSON_PRETTY_PRINT);
-    file_put_contents('../data/recipes.json', $content);
-
-    header("Location: ../entity/detail.php?recipe_id=$id");
+    header("Location: ../entity/index.php");
+    exit;
   }
   ?>
 
@@ -243,7 +302,7 @@ if (!isset($_SESSION['signedIn'])) {
             <select name="category" id="m-category">
               <option value="Entrees">Entrees</option>
               <option value="Sides">Sides</option>
-              <option value="Desserts">Desserts</option>
+              <option value="Dessert">Dessert</option>
             </select>
           </p>
 
@@ -263,14 +322,14 @@ if (!isset($_SESSION['signedIn'])) {
               <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
                 <?php
                 $time = 'hours';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
               <br>
               <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
                 <?php
                 $time = 'minutes';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
             </div>
@@ -292,14 +351,14 @@ if (!isset($_SESSION['signedIn'])) {
               <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
                 <?php
                 $time = 'hours';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
               <br>
               <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
                 <?php
                 $time = 'minutes';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
             </div>

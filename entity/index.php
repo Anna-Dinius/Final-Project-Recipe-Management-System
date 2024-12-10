@@ -1,11 +1,12 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
+include_once('../db.php');
 
 session_start();
 
-$file = '../data/recipes.json';
-$content = file_get_contents($file);
-$recipes = json_decode($content, true);
+// Fetch the recipes from database
+$recipes = fetchRecipes($db);
 
 $title = 'Recipes';
 
