@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 10, 2024 at 05:28 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Dec 11, 2024 at 12:28 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -121,7 +121,7 @@ CREATE TABLE `recipes` (
 
 INSERT INTO `recipes` (`recipe_ID`, `user_ID`, `recipe_name`, `category_ID`, `prep_time_minutes`, `cook_time_minutes`, `servings`, `image`, `view_count`) VALUES
 (18, 1, 'Chocolate Chip Cookies', 2, 10, 10, 6, '../img/old-fashioned-chocolate-chip-cookies.jpg', 1),
-(21, 7, 'Test Recipe', 2, 75, 75, 4, '../img/twice-baked-potatoes.jpeg', 0),
+(21, 7, 'Dillon\'s Testing Recipe', 2, 75, 75, 4, '../img/twice-baked-potatoes.jpeg', 0),
 (23, 1, 'Santa Fe Chicken', 2, 30, 30, 0, '../img/santa-fe-chicken-recipe.jpg', 0);
 
 -- --------------------------------------------------------
@@ -226,8 +226,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_ID`, `name`, `email`, `password`, `is_admin`) VALUES
-(1, 'John Doe', 'johndoe@gmail.com', 'johndoe', 0),
-(7, 'Dillon Carpenter', 'admin@gmail.com', 'password1!', 1);
+(1, 'John Doe', 'johndoe@gmail.com', '$2y$10$Nxa1zDMGIU02VZFPzwzRMOLEmmVD5qCdQ/4vq3/FN9AJv3MaHlb8O', 0),
+(7, 'Dillon Carpenter', 'admin@gmail.com', '$2y$10$ZsQOB6m4vfJrF2r/nwhvO.IlWB9X77oSmXvIRSz6CZXzIVgsXZYcS', 1);
 
 --
 -- Indexes for dumped tables
@@ -306,7 +306,7 @@ ALTER TABLE `recipes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
