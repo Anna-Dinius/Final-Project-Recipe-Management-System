@@ -168,7 +168,7 @@ function startSession($user)
   $_SESSION['signedIn'] = true;
   $_SESSION['name'] = $user['name'];
   $_SESSION['email'] = $user['email'];
-  $_SESSION['user_id'] = $user['user_ID'];
+  $_SESSION['user_ID'] = $user['user_ID'];
 
   if ($user['is_admin'] == 1) {
     $_SESSION['admin'] = true;
@@ -524,4 +524,3 @@ function displaySteps($steps)
     <?php
   }
 }
-

@@ -11,6 +11,7 @@ if (!isset($_SESSION['signedIn'])) {
 } else {
 
   $id = $_GET['recipe_id'];
+  $userid = $_SESSION['user_ID'];
 
   $recipes = fetchRecipes($db);
   $recipe = getRecipe($recipes, $id);
@@ -18,21 +19,18 @@ if (!isset($_SESSION['signedIn'])) {
   $title = 'Add a Recipe';
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //implement SQL queries to add user_ID and recipe_ID to the favorites table
     $db->beginTransaction();
-    $query = $db->prepare('SELECT user_ID FROM users WHERE name=?');
-    $query->execute([$_SESSION['name']]);
-    $user_ID = $query->fetch();
-    $id = $_GET['recipe_id'];
     $sql = 'INSERT INTO favorites (user_ID, recipe_ID) VALUES (:userID, :recipeID)';
     $stmt = $db->prepare($sql);
     $params = [
-        ':userID' => $userID,
-        ':recipe_ID' => $id
+        ':userID' => $userid,
+        ':recipeID' => $id
       ];
-    $sql->execute();
+    $stmt->execute($params);
+    $db->commit();
 
     header("Location: ../favorites/index.php");
+    exit;
   }
 
   ?>
@@ -67,7 +65,7 @@ if (!isset($_SESSION['signedIn'])) {
           <h2>Are you sure you want to add the <?= $recipe['name']; ?> recipe to your favorites?</h2>
 
           <div class="d-flex btns" id="btn-box-<?= $recipe['id'] ?>">
-            <form method="POST" action="index.php">
+            <form method="POST" action="add-favorite.php?recipe_id=<?= $recipe['id'] ?>">
               <a href="index.php" class="btn btn-secondary update-btn">Cancel</a>
               <button type="submit" class="btn btn-secondary update-btn">Add</button>
             </form>

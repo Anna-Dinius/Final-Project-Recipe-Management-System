@@ -5,7 +5,7 @@ include_once('../db.php');
 
 session_start();
 
-$recipes = fetchFavoriteRecipes($db, $_SESSION['user_id']);
+$recipes = fetchFavoriteRecipes($db, $_SESSION['user_ID']);
 
 $title = 'Favorites';
 
