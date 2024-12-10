@@ -121,7 +121,7 @@ CREATE TABLE `recipes` (
 
 INSERT INTO `recipes` (`recipe_ID`, `user_ID`, `recipe_name`, `category_ID`, `prep_time_minutes`, `cook_time_minutes`, `servings`, `image`, `view_count`) VALUES
 (18, 1, 'Chocolate Chip Cookies', 2, 10, 10, 6, '../img/old-fashioned-chocolate-chip-cookies.jpg', 1),
-(21, 7, 'Dillon\'s Testing Recipe', 2, 75, 75, 4, '../img/twice-baked-potatoes.jpeg', 0),
+(21, 7, 'Test Recipe', 2, 75, 75, 4, '../img/twice-baked-potatoes.jpeg', 0),
 (23, 1, 'Santa Fe Chicken', 2, 30, 30, 0, '../img/santa-fe-chicken-recipe.jpg', 0);
 
 -- --------------------------------------------------------
