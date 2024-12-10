@@ -16,7 +16,7 @@ $category = fetchRecipeCategory($db, $recipeID);
 
 $prepTime = fetchRecipeCookTime($db, $recipeID);
 $cookTime = fetchRecipeCookTime($db, $recipeID);
-$totalTime = $prepTime + $cookTime;
+$totalTime = (int) $prepTime + (int) $cookTime;
 
 $steps = fetchRecipeSteps($db, $recipeID);
 $ingredients = fetchRecipeIngredients($db, $recipeID);
