@@ -5,13 +5,14 @@ include_once('../db.php');
 $title = 'Sign In';
 
 if (count($_POST) > 0) {
-    $query = $db->prepare('SELECT user_ID,name,is_admin,email FROM users WHERE email=? AND password=?');
-    $query->execute([$_POST['email'], $_POST['password']]);
+    $query = $db->prepare('SELECT user_ID,name,is_admin,email,password FROM users WHERE email=?');
+    $query->execute([$_POST['email']]);
     $user = $query->fetch();
-
     if ($user) {
+      if (password_verify($_POST['password'], $user['password'])) {
         startSession($user);
         header('location: ../entity/index.php');
+      }
     }
 } ?>
 

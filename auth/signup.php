@@ -22,7 +22,7 @@ if (count($_POST) > 0) {
     $add_user->execute([
       ':name' => $fullname,
       ':email' => $email,
-      ':password' => $password,
+      ':password' => password_hash($password, PASSWORD_DEFAULT),
       ':is_admin' => $is_admin
     ]);
 
