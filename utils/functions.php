@@ -13,7 +13,7 @@ function getHead($title)
   ?>
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
-  <script type="module" src="./js/form.js"></script>
+  <script type="module" src="../entity/js/form.js"></script>
 
   <title><?= $title ?></title>
   <meta charset="UTF-8" />
@@ -38,7 +38,8 @@ function getNav()
         <?php
         if (isset($_SESSION['signedIn'])) {
           ?>
-          <a class="nav-link" href="../auth/logout.php" id="signinBtn">Sign out</a>
+          <a class="nav-link" href="../auth/delete-account.php">Delete account</a>
+          <a class="nav-link" href="../auth/signout.php" id="signinBtn">Sign out</a>
           <?php
         } else {
           ?>
@@ -64,7 +65,7 @@ function getRecipe($recipes, $id)
   return null;
 }
 
-function getSignUpForm()
+function getSignUpForm($data, $db)
 {
   ?>
   <div class="form-group m-3">
@@ -83,13 +84,98 @@ function getSignUpForm()
     <label for="email">Email address</label><span class="required">*</span>
     <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required
       placeholder="Enter email" />
-  </div>
 
-  <div class="form-group m-3">
-    <label for="password">Password</label><span class="required">*</span>
-    <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+    <div class="required signin">
+      <?php
+      if (isset($_POST['email'])) {
+        if (count($_POST) > 0) {
+          if (!validateEmail($_POST['email'])) {
+            echo 'Incorrect email format.';
+          } elseif (checkEmailExists($_POST['email'], $db)) {
+            echo 'An account with that email already exists.';
+          }
+        }
+      }
+      ?>
+    </div>
+
+    <div class="form-group m-3">
+      <label for="password">Password</label><span class="required">*</span>
+      <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+
+      <div class="required signin">
+        <?php
+        if (isset($_POST['password']) && !validatePassword($_POST['password'])) {
+          echo 'Password must contain:<br />- at least 8 characters<br />- one uppercase letter<br />- one lowercase letter<br />- one number.';
+        }
+        ?>
+      </div>
+    </div>
   </div>
   <?php
+}
+
+function checkEmailExists($email, $db)
+{
+  $num_users = $db->prepare('SELECT COUNT(*) AS num_users FROM users WHERE email=?');
+  $num_users->execute([$email]);
+  $num_users = $num_users->fetch();
+
+  $exists = false;
+
+  if ($num_users['num_users'] > 0) {
+    $exists = true;
+  }
+
+  return $exists;
+}
+
+function validateEmail($email)
+{
+  $regex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+  $email = strtolower($email);
+
+  return preg_match($regex, $email) === 1;
+}
+
+function validatePassword($password)
+{
+  $validated = 0;
+  $min_length = 8;
+  $regex = [
+    '/[A-Z]/',
+    '/[a-z]/',
+    '/[0-9]/'
+  ];
+
+  foreach ($regex as $expression) {
+    if (!preg_match($expression, $password)) {
+      $validated = 0;
+      break;
+    }
+
+    if (strlen($password) >= $min_length) {
+      $validated = 1;
+    }
+  }
+
+  return $validated;
+}
+
+function startSession($user)
+{
+  session_start();
+  $_SESSION['signedIn'] = true;
+  $_SESSION['name'] = $user['name'];
+  $_SESSION['email'] = $user['email'];
+  $_SESSION['user_id'] = $user['user_ID'];
+
+  if ($user['is_admin'] == 1) {
+    $_SESSION['admin'] = true;
+  }
+
+  header('location:../index.php');
+  exit();
 }
 
 $visitors_file = '../data/visitors.csv';
@@ -111,6 +197,21 @@ function getViewCount($target_id)
   } else {
     return 'View count not found';
   }
+}
+
+function getNumAdmins($db)
+{
+  $num_admins = $db->prepare('SELECT COUNT(*) AS num_admins FROM users WHERE is_admin=?');
+  $num_admins->execute([1]);
+  $num_admins = $num_admins->fetch();
+
+  $one_admin = 0;
+
+  if (isset($_SESSION['admin']) && $_SESSION['admin'] == true && $num_admins['num_admins'] < 2) {
+    $one_admin = 1;
+  }
+
+  return $one_admin;
 }
 
 function updateViewCount($target_id)
@@ -181,12 +282,13 @@ function displayCards($recipes)
       <?php
       if (isset($_SESSION['signedIn'])) { ?>
         <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-        <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
+          <?php if (allowedToEdit($recipes[$i]['author'])) { ?>
             <a href="../entity/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
             <a href="../entity/edit.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Edit</a>
-        <?php } ?>
-        <a href="../favorites/add-favorite.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-secondary update-btn">Favorite</a>
-      </div>
+          <?php } ?>
+          <a href="../favorites/add-favorite.php?recipe_id=<?= $recipes[$i]['id'] ?>"
+            class="btn btn-secondary update-btn">Favorite</a>
+        </div>
       <?php } ?>
     </div>
     <?php
@@ -213,130 +315,11 @@ function displayFavoriteCards($recipes)
       <?php
       if (isset($_SESSION['signedIn'])) { ?>
         <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-        <a href="../favorites/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
-      </div>
+          <a href="../favorites/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
+        </div>
       <?php } ?>
     </div>
     <?php
-  }
-}
-
-function displayIngredients($ingredients)
-{
-    foreach ($ingredients as $index => $ingredient) {
-        ?>
-        <li id="item-<?= $index ?>"><?= $ingredient['ingredient'] ?></li>
-        <?php
-    }
-}
-
-function displaySteps($steps)
-{
-    foreach ($steps as $index => $step) {
-        ?>
-        <li id="item-<?= $index ?>"><?= $step['step'] ?></li>
-        <?php
-    }
-}
-
-
-function generateServingSizes($action, $servings = 0)
-{
-  $largestServing = 20;
-
-  if ($action == 'create') {
-    for ($i = 0; $i <= $largestServing; $i++) {
-      ?>
-      <option value="<?= $i ?>"><?= $i ?></option>
-      <?php
-    }
-  }
-
-  if ($action == 'edit') {
-    for ($i = 0; $i <= $largestServing; $i++) {
-      if ($i == $servings) {
-        ?>
-        <option value="<?= $i ?>" selected><?= $i ?></option>
-        <?php
-      } else {
-        ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
-      }
-    }
-  }
-}
-
-function generateTimeOptions($action, $time, $selectedValue = null)
-{
-    $maxHours = 24;
-    $maxMinutes = 60;
-
-    if ($action == 'create') {
-        if ($time == 'hours') {
-            for ($i = 0; $i <= $maxHours; $i++) {
-                echo "<option value=\"$i\">$i</option>";
-            }
-        } elseif ($time == 'minutes') {
-            for ($i = 0; $i < $maxMinutes; $i += 5) {
-                echo "<option value=\"$i\">$i</option>";
-            }
-        }
-    } elseif ($action == 'edit') {
-        if ($time == 'hours') {
-            for ($i = 0; $i <= $maxHours; $i++) {
-                $selected = ($i == $selectedValue) ? 'selected' : '';
-                echo "<option value=\"$i\" $selected>$i</option>";
-            }
-        } elseif ($time == 'minutes') {
-            for ($i = 0; $i < $maxMinutes; $i += 5) {
-                $selected = ($i == $selectedValue) ? 'selected' : '';
-                echo "<option value=\"$i\" $selected>$i</option>";
-            }
-        }
-    }
-}
-
-
-function generateSteps($steps = [])
-{
-  for ($i = 0; $i < count($steps); $i++) {
-    ?>
-    <div class="d-flex">
-      <textarea class="form-control mb-3 step-input" name="steps[]"
-        id="step-<?= $i + 1 ?>"><?= $steps[$i]['step'] ?></textarea>
-      <button type="button" class="btn btn-danger del-input">X</button>
-    </div>
-    <?php
-  }
-}
-function generateIngredients($ingredients = [])
-{
-  for ($i = 0; $i < count($ingredients); $i++) {
-    ?>
-    <div class="d-flex">
-      <input class="form-control mb-3 ingredient-input" name="ingredients[]" id="ingredient-<?= $i + 1 ?>"
-        value="<?= $ingredients[$i]['ingredient'] ?>" />
-      <button type="button" class="btn btn-danger del-input">X</button>
-    </div>
-    <?php
-  }
-}
-
-function generateCategory($category = '')
-{
-  $categories = ['Entrees', 'Sides', 'Dessert'];
-
-  foreach ($categories as $category) {
-    if ($category == $category) {
-      ?>
-      <option value="<?= $category ?>" selected><?= $category ?></option>
-      <?php
-    } else {
-      ?>
-      <option value="<?= $category ?>"><?= $category ?></option>
-      <?php
-    }
   }
 }
 
@@ -372,12 +355,18 @@ function displayTime($totalMinutes)
     $time = 'Error fetching time';
   }
 
-    echo $time;
+  echo $time;
 }
+
 function displayUserRows($users)
 {
-  // echo count($users);
   foreach ($users as $user) {
+    $current_user = 0;
+
+    if (isset($_SESSION['user_id']) && $user['user_ID'] == $_SESSION['user_id']) {
+      $current_user = 1;
+    }
+
     ?>
     <tr>
       <td class="name"><?= $user['name'] ?></td>
@@ -394,7 +383,8 @@ function displayUserRows($users)
       </td>
 
       <td>
-        <form method="POST" action="change-status.php?user_ID=<?= $user['user_ID'] ?>">
+        <form method="POST"
+          action="<?= $current_user == 1 ? 'change-own-status.php' : 'change-status.php?user_ID=' . $user["user_ID"] ?>">
           <button type="submit" name="status" value="<?= $user['is_admin'] == 1 ? 'admin' : 'user' ?>" class="btn
             btn-primary change-status-btn">
             Change Status
@@ -412,9 +402,126 @@ function displayUserRows($users)
           <?php
         }
         ?>
-
       </td>
     </tr>
     <?php
   }
 }
+
+function generateCategory($category = '')
+{
+  $categories = ['Entrees', 'Sides', 'Dessert'];
+
+  foreach ($categories as $category) {
+    if ($category == $category) {
+      ?>
+      <option value="<?= $category ?>" selected><?= $category ?></option>
+      <?php
+    } else {
+      ?>
+      <option value="<?= $category ?>"><?= $category ?></option>
+      <?php
+    }
+  }
+}
+
+function generateTimeOptions($action, $time, $selectedValue = null)
+{
+  $maxHours = 24;
+  $maxMinutes = 60;
+
+  if ($action == 'create') {
+    if ($time == 'hours') {
+      for ($i = 0; $i <= $maxHours; $i++) {
+        echo "<option value=\"$i\">$i</option>";
+      }
+    } elseif ($time == 'minutes') {
+      for ($i = 0; $i < $maxMinutes; $i += 5) {
+        echo "<option value=\"$i\">$i</option>";
+      }
+    }
+  } elseif ($action == 'edit') {
+    if ($time == 'hours') {
+      for ($i = 0; $i <= $maxHours; $i++) {
+        $selected = ($i == $selectedValue) ? 'selected' : '';
+        echo "<option value=\"$i\" $selected>$i</option>";
+      }
+    } elseif ($time == 'minutes') {
+      for ($i = 0; $i < $maxMinutes; $i += 5) {
+        $selected = ($i == $selectedValue) ? 'selected' : '';
+        echo "<option value=\"$i\" $selected>$i</option>";
+      }
+    }
+  }
+}
+
+function generateServingSizes($action, $servings = 0)
+{
+  $largestServing = 20;
+
+  if ($action == 'create') {
+    for ($i = 0; $i <= $largestServing; $i++) {
+      ?>
+      <option value="<?= $i ?>"><?= $i ?></option>
+      <?php
+    }
+  }
+
+  if ($action == 'edit') {
+    for ($i = 0; $i <= $largestServing; $i++) {
+      if ($i == $servings) {
+        ?>
+        <option value="<?= $i ?>" selected><?= $i ?></option>
+        <?php
+      } else {
+        ?>
+        <option value="<?= $i ?>"><?= $i ?></option>
+        <?php
+      }
+    }
+  }
+}
+
+function generateSteps($steps = [])
+{
+  for ($i = 0; $i < count($steps); $i++) {
+    ?>
+    <div class="d-flex">
+      <textarea class="form-control mb-3 step-input" name="steps[]"
+        id="step-<?= $i + 1 ?>"><?= $steps[$i]['step'] ?></textarea>
+      <button type="button" class="btn btn-danger del-input">X</button>
+    </div>
+    <?php
+  }
+}
+function generateIngredients($ingredients = [])
+{
+  for ($i = 0; $i < count($ingredients); $i++) {
+    ?>
+    <div class="d-flex">
+      <input class="form-control mb-3 ingredient-input" name="ingredients[]" id="ingredient-<?= $i + 1 ?>"
+        value="<?= $ingredients[$i]['ingredient'] ?>" />
+      <button type="button" class="btn btn-danger del-input">X</button>
+    </div>
+    <?php
+  }
+}
+
+function displayIngredients($ingredients)
+{
+  foreach ($ingredients as $index => $ingredient) {
+    ?>
+    <li id="item-<?= $index ?>"><?= $ingredient['ingredient'] ?></li>
+    <?php
+  }
+}
+
+function displaySteps($steps)
+{
+  foreach ($steps as $index => $step) {
+    ?>
+    <li id="item-<?= $index ?>"><?= $step['step'] ?></li>
+    <?php
+  }
+}
+

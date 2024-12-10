@@ -279,6 +279,11 @@ button {
 	color: red;
 }
 
+.signin {
+  font-size: 12px;
+  text-align: left;
+}
+
 .signInUp{
 	margin: 10px auto;
 }
@@ -362,6 +367,10 @@ a {
 .update-btn:hover{
 	background-color: #c8665b;
 	border: #c8665b;
+}
+
+.container.detail {
+  max-width: none;
 }
 
 #detailBtns{

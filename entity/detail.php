@@ -5,7 +5,6 @@ include_once('../db.php');
 
 session_start();
 
-
 $recipeID = $_GET['recipe_id'];
 
 updateViewCountSQL($db, $recipeID);
@@ -15,8 +14,8 @@ $recipeName = fetchRecipeName($db, $recipeID);
 $author = fetchRecipeAuthor($db, $recipeID);
 $category = fetchRecipeCategory($db, $recipeID);
 
-$prepTime =  fetchRecipeCookTime($db, $recipeID);
-$cookTime =  fetchRecipeCookTime($db, $recipeID);
+$prepTime = fetchRecipeCookTime($db, $recipeID);
+$cookTime = fetchRecipeCookTime($db, $recipeID);
 $totalTime = $prepTime + $cookTime;
 
 $steps = fetchRecipeSteps($db, $recipeID);
@@ -40,7 +39,7 @@ $title = 'Recipe Details';
 	</nav>
 
 	<main>
-		<div class="container">
+		<div class="container detail">
 			<div class="row">
 				<div id="btns">
 					<a href="index.php" class="btn btn-secondary update-btn">

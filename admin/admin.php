@@ -6,16 +6,49 @@ if (!isset($_SESSION['admin'])) {
   alert();
   die('You do not have permission to access this page');
 } else {
-
   include_once('../db.php');
 
   $title = "Manage Users";
+  $showForm;
+
   $query = $db->query('SELECT user_ID,name,email,is_admin FROM users');
+
+  if (isset($_GET['form']) && $_GET['form'] == 'open') {
+    $showForm = 1;
+  } else {
+    $showForm = 0;
+  }
 
   $num_users = $db->prepare('SELECT COUNT(*) AS num_users FROM users WHERE is_admin=?');
   $num_users->execute([0]);
   $num_users = $num_users->fetch();
 
+  if (count($_POST) > 0) {
+    if (isset($_POST['add-user'])) {
+      //Grab data from $_POST.
+      $name = $_POST['firstName'] . " " . $_POST['lastName'];
+      $email = $_POST['email'];
+      $password = (string) $_POST['password'];
+      $is_admin = 0;
+
+      if ($_POST['status'] == "admin") {
+        $is_admin = 1;
+      }
+
+      $valid_email = validateEmail($_POST['email']);
+      $valid_password = validatePassword($password);
+
+      // Add data to db if email isn't already being used and email and password have correct format.
+      if ($valid_email == 1 && $valid_password == 1 && !checkEmailExists($_POST['email'], $db)) {
+        $add_user = $db->prepare('INSERT INTO users(name,email,password,is_admin) VALUES(?,?,?,?)');
+        $add_user->execute([$name, $email, $password, $is_admin]);
+
+        $showForm = 0;
+
+        header('location: admin.php?user=added');
+      }
+    }
+  }
   ?>
 
   <!doctype html>
@@ -47,13 +80,20 @@ if (!isset($_SESSION['admin'])) {
 
       <div>
         <!-- Displays Create btn if Create form is not visible -->
-        <?php if (!(isset($_GET['action']) && $_GET['action'] == "create")) { ?>
-          <a href="admin.php?action=create" class="btn btn-primary admin-create-user-btn create-btn">Create a User</a>
+        <?php if ($showForm == 0) {
+          ?>
+          <form method="POST" action="admin.php?form=open">
+            <button type="submit" class="btn btn-primary admin-create-user-btn create-btn">
+              Create a User
+            </button>
+          </form>
 
+          <!-- Displays Create form if Create btn is not visible -->
         <?php } else { ?>
-          <form class="admin-create-user-form" method="POST" action="create-user.php">
+          <form class="admin-create-user-form" method="POST">
             <h2>Create a User</h2>
-            <?php getSignUpForm() ?>
+
+            <?php getSignUpForm($_POST, $db) ?>
 
             <div class="form-group m-3">
               <label for="Status">Status</label><span class="required">*</span>
@@ -76,7 +116,7 @@ if (!isset($_SESSION['admin'])) {
                 Cancel
               </a>
 
-              <button class="btn btn-primary admin-create-user-btn create-btn">
+              <button type="submit" name="add-user" class="btn btn-primary admin-create-user-btn create-btn">
                 Add User
               </button>
             </div>
@@ -84,6 +124,10 @@ if (!isset($_SESSION['admin'])) {
         <?php } ?>
 
         <h2 class="user-list">User List</h2>
+
+        <div>
+          <?= isset($_GET['user']) && $_GET['user'] == 'added' ? 'User added successfully.' : '' ?>
+        </div>
 
         <div class="table-container">
           <table class="admin-table">
@@ -108,7 +152,8 @@ if (!isset($_SESSION['admin'])) {
           </table>
         </div>
 
-        <?php if ($num_users['num_users'] > 0) { ?>
+        <!-- Shows btn if there is more than 1 user with User status -->
+        <?php if ($num_users['num_users'] > 1) { ?>
           <form method="POST" action="delete-all.php?target=user">
             <button class="btn btn-danger">Delete All Users</button>
           </form>
@@ -118,5 +163,4 @@ if (!isset($_SESSION['admin'])) {
   </body>
 
   </html>
-
 <?php } ?>

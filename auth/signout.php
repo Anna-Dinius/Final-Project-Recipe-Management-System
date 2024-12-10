@@ -1,4 +1,4 @@
-<?php //This file unsets the signed in data and destroys the session.
+<?php
 session_start();
 
 if (isset($_SESSION['signedIn'])) {
@@ -7,6 +7,6 @@ if (isset($_SESSION['signedIn'])) {
 
 session_destroy();
 
-header('Location: ../entity/index.php'); 
+header('Location: ../entity/index.php');
 exit();
 ?>

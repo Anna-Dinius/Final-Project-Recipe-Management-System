@@ -1,4 +1,24 @@
-/*------- FORM LOGIC -------------------------------------------------------------------------- */
+
+/*
+function validateEmail(email) {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        );
+}
+
+function validatePassword(password) {
+    return (
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[^A-Za-z0-9]/.test(password) &&
+        password.length >= 8
+    );
+}
+
+/*------- CREATE/EDIT PAGE LOGIC -------------------------------------------------------------------------- */
 $(document).on("click", ".del-input", function() {
     $(this).closest("div").remove();
 });
@@ -29,28 +49,20 @@ export function clearForm() {
     $("#steps").empty();
 }
 
-var prepHrs = 0;
-var prepMins = 0;
-var cookHrs = 0;
-var cookMins = 0;
+var prepHrs;
+var prepMins;
+var cookHrs;
+var cookMins;
 
-$(document).on('change', '.prep_time.time_hrs', function() {
-    prepHrs = parseInt($(this).val());
-    updateTotalTime();
-});
+function getTimeValues() {
+    prepHrs = parseInt(document.getElementById('prep_time_hrs')?.value || 0);
+    prepMins = parseInt(document.getElementById('prep_time_mins')?.value || 0);
+    cookHrs = parseInt(document.getElementById('cook_time_hrs')?.value || 0);
+    cookMins = parseInt(document.getElementById('cook_time_mins')?.value || 0);
+}
 
-$(document).on('change', '.prep_time.time_mins', function() {
-    prepMins = parseInt($(this).val());
-    updateTotalTime();
-});
-
-$(document).on('change', '.cook_time.time_hrs', function() {
-    cookHrs = parseInt($(this).val());
-    updateTotalTime();
-});
-
-$(document).on('change', '.cook_time.time_mins', function() {
-    cookMins = parseInt($(this).val());
+$(document).on('change', '.time', function() {
+    getTimeValues();
     updateTotalTime();
 });
 
@@ -73,4 +85,5 @@ export function updateTotalTime() {
     var totalTimeString = totalHrs + " " + hours + ", " + totalMins + " " + minutes;
 
     document.getElementById('m-total-time').value = totalTimeString;
+    console.log('Total Time:', totalTimeString);
 }
