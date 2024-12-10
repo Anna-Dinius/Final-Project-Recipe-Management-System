@@ -8,9 +8,6 @@ if (!isset($_SESSION['signedIn'])) {
   alert();
   die('You do not have permission to access this page');
 } else {
-  $file = '../data/recipes.json';
-  $content = file_get_contents($file);
-  $recipes = json_decode($content, true);
 
   $action = 'create';
   $recipe = null;
@@ -27,39 +24,13 @@ if (!isset($_SESSION['signedIn'])) {
     move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
     $image = $imagePath;
 
-    $prep_time_hours = $_POST['prep_time_hours'];
-    $prep_time_minutes = $_POST['prep_time_minutes'];
-    $cook_time_hours = $_POST['cook_time_hours'];
-    $cook_time_minutes = $_POST['cook_time_minutes'];
-    $servings = $_POST['servings'];
+    $prep_time_hours = (int)$_POST['prep_time_hours'];
+    $prep_time_minutes = (int)$_POST['prep_time_minutes'];
+    $cook_time_hours = (int)$_POST['cook_time_hours'];
+    $cook_time_minutes = (int)$_POST['cook_time_minutes'];
+    $servings = (int)$_POST['servings'];
     $ingredients = $_POST['ingredients'];
     $steps = $_POST['steps'];
-
-    $total_time_hours = $prep_time_hours + $cook_time_hours;
-    $total_time_minutes = $prep_time_minutes + $cook_time_minutes;
-
-    if ($total_time_minutes >= 60) {
-      $total_time_hours++;
-      $total_time_minutes = $total_time_minutes % 60;
-    }
-
-    $id = count($recipes) + 1;
-
-    $new_recipe = [
-      'id' => $id,
-      'name' => $name,
-      'author' => $author,
-      'category' => $category,
-      'image' => $image,
-      'prep_time_hours' => $prep_time_hours,
-      'prep_time_minutes' => $prep_time_minutes,
-      'cook_time_hours' => $cook_time_hours,
-      'cook_time_minutes' => $cook_time_minutes,
-      'total_time' => "{$total_time_hours} hours {$total_time_minutes} minutes",
-      'servings' => $servings,
-      'ingredients' => $ingredients,
-      'steps' => $steps,
-    ];
     try{
       $db->beginTransaction();
 
@@ -81,14 +52,17 @@ if (!isset($_SESSION['signedIn'])) {
 
       //Recipes Insert Statement
       //$value means that I haven't gotten their value yet.
+
+      $prep_time_total = $prep_time_minutes + $prep_time_hours * 60;
+      $cook_time_total = $cook_time_minutes + $cook_time_hours * 60;
       $sql = "INSERT INTO recipes (user_ID, recipe_name, category_ID, prep_time_minutes, cook_time_minutes, servings, image, view_count) VALUES (:userID, :recipe_name, :category_ID, :prep_time_minutes, :cook_time_minutes, :servings, :image, :view_count)";
       $stmt = $db->prepare($sql);
       $params = [
         ':userID' => $userID,
         ':recipe_name' => $name,
         ':category_ID' => $categoryID,
-        ':prep_time_minutes' => $prep_time_minutes,
-        ':cook_time_minutes' => $cook_time_minutes,
+        ':prep_time_minutes' => $prep_time_total,
+        ':cook_time_minutes' => $cook_time_total,
         ':servings' => $servings,
         ':image' => $imagePath,
         ':view_count' => 0
@@ -141,20 +115,17 @@ if (!isset($_SESSION['signedIn'])) {
               ':ingredient_ID' => $ingredientID // Ingredient ID from above
           ]);
       }
+
+      $db->commit();
       
-
-
     } catch (Exception $e) {
       // Roll back the transaction on any failure
       $db->rollBack();
       echo "Transaction failed: " . $e->getMessage();
     }
 
-    $recipes[] = $new_recipe;
-    $content = json_encode($recipes, JSON_PRETTY_PRINT);
-    file_put_contents('../data/recipes.json', $content);
-
-    header("Location: ../entity/detail.php?recipe_id=$id");
+    header("Location: ../entity/index.php");
+    exit;
   }
   ?>
 
@@ -331,7 +302,7 @@ if (!isset($_SESSION['signedIn'])) {
             <select name="category" id="m-category">
               <option value="Entrees">Entrees</option>
               <option value="Sides">Sides</option>
-              <option value="Desserts">Desserts</option>
+              <option value="Dessert">Dessert</option>
             </select>
           </p>
 
@@ -351,14 +322,14 @@ if (!isset($_SESSION['signedIn'])) {
               <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
                 <?php
                 $time = 'hours';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
               <br>
               <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
                 <?php
                 $time = 'minutes';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
             </div>
@@ -380,14 +351,14 @@ if (!isset($_SESSION['signedIn'])) {
               <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
                 <?php
                 $time = 'hours';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
               <br>
               <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
                 <?php
                 $time = 'minutes';
-                generateTimeOptions($action, $type, $time, $recipe);
+                generateTimeOptions($action, $time, $recipe);
                 ?>
               </select>
             </div>

@@ -1,5 +1,7 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
+include_once('../db.php');
 
 session_start();
 
@@ -7,12 +9,24 @@ if (!isset($_SESSION['signedIn'])) {
   alert();
   die('You do not have permission to access this page');
 } else {
-  $file = '../data/recipes.json';
-  $content = file_get_contents($file);
-  $recipes = json_decode($content, true);
+  $recipeID = $_GET['recipe_id'];
 
-  $id = $_GET['recipe_id'];
-  $recipe = getRecipe($recipes, $id);
+  $imageOld = fetchRecipeImagePath($db, $recipeID);
+  $recipeName = fetchRecipeName($db, $recipeID);
+  $author = fetchRecipeAuthor($db, $recipeID);
+  $category = fetchRecipeCategory($db, $recipeID);
+
+  $prepTime =  fetchRecipeCookTime($db, $recipeID);
+  $prep_time_hours = intdiv($prepTime, 60); // Calculate full hours
+  $prep_time_minutes = $prepTime % 60; // Get remaining minutes after dividing by 60
+  $cookTime =  fetchRecipeCookTime($db, $recipeID);
+  $cook_time_hours = intdiv($cookTime, 60); // Calculate full hours
+  $cook_time_minutes = $cookTime % 60; // Get remaining minutes after dividing by 60
+  $totalTime = $prepTime + $cookTime;
+
+  $steps = fetchRecipeSteps($db, $recipeID);
+  $ingredients = fetchRecipeIngredients($db, $recipeID);
+  $servings = fetchRecipeServings($db, $recipeID);
 
   $action = 'edit';
   $title = 'Edit a Recipe';
@@ -27,7 +41,7 @@ if (!isset($_SESSION['signedIn'])) {
       move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
       $image = $imagePath;
     } else
-      $image = $recipe['image'];
+      $image = $imageOld;
 
     $prep_time_hours = $_POST['prep_time_hours'];
     $prep_time_minutes = $_POST['prep_time_minutes'];
@@ -50,32 +64,108 @@ if (!isset($_SESSION['signedIn'])) {
       $total_time_minutes = $total_time_minutes % 60;
     }
 
-    for ($i = 0; $i < count($recipes); $i++) {
-      if ($recipes[$i]['id'] == $id) {
-        $recipes[$i]['name'] = $name;
-        $recipes[$i]['category'] = $category;
-        $recipes[$i]['image'] = $image;
-        $recipes[$i]['prep_time_hours'] = $prep_time_hours;
-        $recipes[$i]['prep_time_minutes'] = $prep_time_minutes;
-        $recipes[$i]['cook_time_hours'] = $cook_time_hours;
-        $recipes[$i]['cook_time_minutes'] = $cook_time_minutes;
-        $recipes[$i]['total_time'] = "{$total_time_hours} hours {$total_time_minutes} minutes";
-        $recipes[$i]['servings'] = $servings;
+    $prep_time_hours = (int)$_POST['prep_time_hours'];
+    $prep_time_minutes = (int)$_POST['prep_time_minutes'];
+    $cook_time_hours = (int)$_POST['cook_time_hours'];
+    $cook_time_minutes = (int)$_POST['cook_time_minutes'];
+    $servings = (int)$_POST['servings'];
+    $ingredients = $_POST['ingredients'];
+    $steps = $_POST['steps'];
+    try{
+      deleteOldImage($db, $recipeID); //Should probably happen before the transaction since it includes unlinking?
+      $db->beginTransaction();
+      deleteOldRecipe($db, $recipeID);
 
-        if (isset($ingredients)) {
-          $recipes[$i]['ingredients'] = $ingredients;
-        }
-        if (isset($steps)) {
-          $recipes[$i]['steps'] = $steps;
-        }
-        break;
+      //grab user ID
+      $sql = "SELECT user_ID FROM users WHERE name = :name";
+      $stmt = $db->prepare($sql);
+      $params = [':name' => $author];
+      $stmt->execute($params);
+      $user = $stmt->fetch();
+      $userID = $user['user_ID'];
+
+      //grab category ID
+      $sql = "SELECT category_ID FROM category WHERE category_name = :category_name";
+      $stmt = $db->prepare($sql);
+      $params = [':category_name' => $category];
+      $stmt->execute($params);
+      $categoryRow = $stmt->fetch();
+      $categoryID = $categoryRow['category_ID'];
+
+      //Recipes Insert Statement
+      //$value means that I haven't gotten their value yet.
+
+      $prep_time_total = $prep_time_minutes + $prep_time_hours * 60;
+      $cook_time_total = $cook_time_minutes + $cook_time_hours * 60;
+      $sql = "INSERT INTO recipes (user_ID, recipe_name, category_ID, prep_time_minutes, cook_time_minutes, servings, image, view_count) VALUES (:userID, :recipe_name, :category_ID, :prep_time_minutes, :cook_time_minutes, :servings, :image, :view_count)";
+      $stmt = $db->prepare($sql);
+      $params = [
+        ':userID' => $userID,
+        ':recipe_name' => $name,
+        ':category_ID' => $categoryID,
+        ':prep_time_minutes' => $prep_time_total,
+        ':cook_time_minutes' => $cook_time_total,
+        ':servings' => $servings,
+        ':image' => $image,
+        ':view_count' => 0
+      ];
+      $stmt->execute($params);
+
+      //Once the recipe is inputted, we can grab the recipe ID.
+
+      $recipe_ID = $db->lastInsertId(); // Fetch the auto-incremented ID of the inserted recipe
+
+      //Steps Insert Statements
+      $sql = "INSERT INTO steps (order_number, recipe_ID, step) VALUES (:order_number, :recipe_ID, :step)";
+      $stmt = $db->prepare($sql);
+
+      $order_number = 1; // Start from step 1
+      foreach ($steps as $step) {
+          $params = [
+              ':order_number' => $order_number,
+              ':recipe_ID' => $recipe_ID, // Use the fetched recipe_ID
+              ':step' => $step // Step description
+          ];
+          $stmt->execute($params);
+          $order_number++;
       }
+      //Ingredients
+      $selectIngredientID = "SELECT ingredients_ID FROM ingredients WHERE ingredient = :ingredient";
+      $addIngredient = "INSERT INTO ingredients (ingredient) VALUES (:ingredient)";
+      $RecipeIngredientRelationship = "INSERT INTO recipe_r_ingredients (recipe_ID, ingredient_ID) VALUES (:recipe_ID, :ingredient_ID)";
+      
+      foreach ($ingredients as $ingredient) {
+          // Check if the ingredient exists
+          $stmt = $db->prepare($selectIngredientID);
+          $stmt->execute([':ingredient' => $ingredient]);
+          $result = $stmt->fetch();
+      
+          if ($result) {
+              // Ingredient exists, get its ID
+              $ingredientID = $result['ingredients_ID'];
+          } else {
+              // Ingredient does not exist, insert it and get the new ID
+              $stmt = $db->prepare($addIngredient);
+              $stmt->execute([':ingredient' => $ingredient]);
+              $ingredientID = $db->lastInsertId();
+          }
+      
+          // Create the relationship between recipe and ingredient
+          $stmt = $db->prepare($RecipeIngredientRelationship);
+          $stmt->execute([
+              ':recipe_ID' => $recipe_ID, // Recipe ID from the earlier insert
+              ':ingredient_ID' => $ingredientID // Ingredient ID from above
+          ]);
+      }
+
+      $db->commit();
+      
+    } catch (Exception $e) {
+      // Roll back the transaction on any failure
+      $db->rollBack();
+      echo "Transaction failed: " . $e->getMessage();
     }
-
-    $content = json_encode($recipes, JSON_PRETTY_PRINT);
-    file_put_contents('../data/recipes.json', $content);
-
-    header("Location: ../entity/detail.php?recipe_id=$id");
+    //header("Location: ../entity/detail.php?recipe_id=$id");
   }
   ?>
 
@@ -111,12 +201,12 @@ if (!isset($_SESSION['signedIn'])) {
             <p>
               <strong>Recipe Name: </strong>
               <span class="required">*</span>
-              <input type="text" class="form-control" name="name" id="recipe-name" value="<?= $recipe['name'] ?>" />
+              <input type="text" class="form-control" name="name" id="recipe-name" value="<?= $recipeName ?>" />
             </p>
 
             <p class="author-input">
               <strong>Author: </strong>
-              <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $recipe['author'] ?>"
+              <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $author ?>"
                 disabled />
             </p>
 
@@ -144,14 +234,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
                   <?php
                   $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $prep_time_hours);
                   ?>
                 </select>
                 <br>
                 <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
                   <?php
                   $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $prep_time_minutes);
                   ?>
                 </select>
               </div>
@@ -174,14 +264,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
                   <?php
                   $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $cook_time_hours);
                   ?>
                 </select>
                 <br>
                 <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
                   <?php
                   $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $cook_time_minutes);
                   ?>
                 </select>
               </div>
@@ -191,7 +281,7 @@ if (!isset($_SESSION['signedIn'])) {
             <p class="total-time-input">
               <strong>Total Time: &nbsp;&nbsp;</strong>
               <input type="text" class="form-control" name="total_time" id="m-total-time"
-                value="<?= $recipe['total_time'] ?>" disabled />
+                value="<?= $totalTime ?>" disabled />
             </p>
 
             <p>
@@ -199,14 +289,14 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
               <select name="servings" id="servingSizes">
                 <?php
-                generateServingSizes($action, $recipe);
+                generateServingSizes($action, $servings);
                 ?>
               </select>
             </p>
 
             <p>
               <strong>Image: &nbsp;&nbsp;</strong><input class="form-control" name="image"
-                value="<?= $recipe['image'] ?>" />
+                value="<?= $imageOld ?>" />
             </p>
 
             <p>
@@ -214,7 +304,7 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
             <div id="m-ingredients">
               <?php
-              generateIngredients($recipe);
+              generateIngredients($ingredients);
               ?>
             </div>
 
@@ -226,7 +316,7 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
             <div id="m-steps">
               <?php
-              generateSteps($recipe);
+              generateSteps($steps);
               ?>
             </div>
 
@@ -252,19 +342,19 @@ if (!isset($_SESSION['signedIn'])) {
             <p>
               <strong>Recipe Name: </strong>
               <span class="required">*</span>
-              <input type="text" class="form-control" name="name" id="recipe-name" value="<?= $recipe['name'] ?>" />
+              <input type="text" class="form-control" name="name" id="recipe-name" value="<?= $recipeName ?>" />
             </p>
 
             <p>
               <strong>Author: </strong>
-              <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $recipe['author'] ?>"
+              <input type="text" class="form-control" name="author" id="m-authorName" value="<?= $author ?>"
                 disabled />
             </p>
 
             <p>
               <strong>Category: &nbsp;&nbsp;</strong>
               <select name="category" id="m-category">
-                <?php generateCategory($recipe); ?>
+                <?php generateCategory($category); ?>
               </select>
             </p>
 
@@ -285,14 +375,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <select name="prep_time_hours" class="time_hrs prep_time" id="prep_time_hrs">
                   <?php
                   $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $prep_time_hours);
                   ?>
                 </select>
                 <br>
                 <select name="prep_time_minutes" class="time_mins prep_time" id="prep_time_mins">
                   <?php
                   $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $prep_time_minutes);
                   ?>
                 </select>
               </div>
@@ -315,14 +405,14 @@ if (!isset($_SESSION['signedIn'])) {
                 <select name="cook_time_hours" class="time_hrs cook_time" id="cook_time_hrs">
                   <?php
                   $time = 'hours';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $cook_time_hours);
                   ?>
                 </select>
                 <br>
                 <select name="cook_time_minutes" class="time_mins cook_time" id="cook_time_mins">
                   <?php
                   $time = 'minutes';
-                  generateTimeOptions($action, $type, $time, $recipe);
+                  generateTimeOptions($action, $time, $cook_time_minutes);
                   ?>
                 </select>
               </div>
@@ -332,7 +422,7 @@ if (!isset($_SESSION['signedIn'])) {
             <p>
               <strong>Total Time: &nbsp;&nbsp;</strong>
               <input type="text" class="form-control" name="total_time" id="m-total-time"
-                value="<?= $recipe['total_time'] ?>" disabled />
+                value="<?= $totalTime ?>" disabled />
             </p>
 
             <p>
@@ -340,7 +430,7 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
               <select name="servings" id="servingSizes">
                 <?php
-                generateServingSizes($action, $recipe);
+                generateServingSizes($action, $servings);
                 ?>
               </select>
             </p>
@@ -354,7 +444,7 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
             <div id="m-ingredients">
               <?php
-              generateIngredients($recipe);
+              generateIngredients($ingredients);
               ?>
             </div>
 
@@ -366,7 +456,7 @@ if (!isset($_SESSION['signedIn'])) {
               <span class="required">*</span>
             <div id="m-steps">
               <?php
-              generateSteps($recipe);
+              generateSteps($steps);
               ?>
             </div>
 

@@ -228,3 +228,38 @@ function fetchRecipeServings($db, $recipeID)
     }
 }
 
+function deleteOldRecipe($db, $recipeID)
+{
+    try {
+        $sql = "DELETE FROM recipes WHERE recipe_ID = :recipeID";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':recipeID' => $recipeID]);
+
+        return true; // Deletion successful
+    } catch (Exception $e) {
+        echo "Error deleting recipe: " . $e->getMessage();
+        return false;
+    }
+}
+
+function deleteOldImage($db, $recipeID)
+{
+    try {
+        // Fetch current image path from the database
+        $sql = "SELECT image FROM recipes WHERE recipe_ID = :recipeID";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':recipeID' => $recipeID]);
+        $recipe = $stmt->fetch();
+
+        if ($recipe && isset($recipe['image']) && file_exists($recipe['image'])) {
+            unlink($recipe['image']); // Delete the image file
+        }
+
+        return true;
+    } catch (Exception $e) {
+        echo "Error deleting old image: " . $e->getMessage();
+        return false;
+    }
+}
+
+

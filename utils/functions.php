@@ -208,7 +208,7 @@ function displaySteps($steps)
 }
 
 
-function generateServingSizes($action, $recipe)
+function generateServingSizes($action, $servings = 0)
 {
   $largestServing = 20;
 
@@ -222,7 +222,7 @@ function generateServingSizes($action, $recipe)
 
   if ($action == 'edit') {
     for ($i = 0; $i <= $largestServing; $i++) {
-      if ($i == $recipe['servings']) {
+      if ($i == $servings) {
         ?>
         <option value="<?= $i ?>" selected><?= $i ?></option>
         <?php
@@ -235,85 +235,68 @@ function generateServingSizes($action, $recipe)
   }
 }
 
-function generateTimeOptions($action, $type, $time, $recipe)
+function generateTimeOptions($action, $time, $selectedValue = null)
 {
-  $maxHours = 24;
-  $maxMinutes = 60;
+    $maxHours = 24;
+    $maxMinutes = 60;
 
-  if ($action == 'create') {
-    if ($time == 'hours') {
-      for ($i = 0; $i <= $maxHours; $i++) {
-        ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
-      }
-    } elseif ($time == 'minutes') {
-      for ($i = 0; $i < $maxMinutes; $i += 5) {
-        ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
-      }
-    }
-  } elseif ($action == 'edit') {
-    if ($time == 'hours') {
-      for ($i = 0; $i <= $maxHours; $i++) {
-        if ($i == $recipe[$type . '_time_hours']) {
-          ?>
-          <option value="<?= $i ?>" selected><?= $i ?></option>
-          <?php
-        } else {
-          ?>
-          <option value="<?= $i ?>"><?= $i ?></option>
-          <?php
+    if ($action == 'create') {
+        if ($time == 'hours') {
+            for ($i = 0; $i <= $maxHours; $i++) {
+                echo "<option value=\"$i\">$i</option>";
+            }
+        } elseif ($time == 'minutes') {
+            for ($i = 0; $i < $maxMinutes; $i += 5) {
+                echo "<option value=\"$i\">$i</option>";
+            }
         }
-      }
-    } elseif ($time == 'minutes') {
-      for ($i = 0; $i < $maxMinutes; $i += 5) {
-        if ($i == $recipe[$type . '_time_minutes']) {
-          ?>
-          <option value="<?= $i ?>" selected><?= $i ?></option>
-          <?php
-        } else {
-          ?>
-          <option value="<?= $i ?>"><?= $i ?></option>
-          <?php
+    } elseif ($action == 'edit') {
+        if ($time == 'hours') {
+            for ($i = 0; $i <= $maxHours; $i++) {
+                $selected = ($i == $selectedValue) ? 'selected' : '';
+                echo "<option value=\"$i\" $selected>$i</option>";
+            }
+        } elseif ($time == 'minutes') {
+            for ($i = 0; $i < $maxMinutes; $i += 5) {
+                $selected = ($i == $selectedValue) ? 'selected' : '';
+                echo "<option value=\"$i\" $selected>$i</option>";
+            }
         }
-      }
     }
-  }
 }
 
-function generateSteps($recipe)
+
+function generateSteps($steps = [])
 {
-  for ($i = 0; $i < count($recipe['steps']); $i++) {
+  for ($i = 0; $i < count($steps); $i++) {
     ?>
     <div class="d-flex">
       <textarea class="form-control mb-3 step-input" name="steps[]"
-        id="step-<?= $i + 1 ?>"><?= $recipe['steps'][$i] ?></textarea>
+        id="step-<?= $i + 1 ?>"><?= $steps[$i]['step'] ?></textarea>
       <button type="button" class="btn btn-danger del-input">X</button>
     </div>
     <?php
   }
 }
-function generateIngredients($recipe)
+function generateIngredients($ingredients = [])
 {
-  for ($i = 0; $i < count($recipe['ingredients']); $i++) {
+  for ($i = 0; $i < count($ingredients); $i++) {
     ?>
     <div class="d-flex">
       <input class="form-control mb-3 ingredient-input" name="ingredients[]" id="ingredient-<?= $i + 1 ?>"
-        value="<?= $recipe['ingredients'][$i] ?>" />
+        value="<?= $ingredients[$i]['ingredient'] ?>" />
       <button type="button" class="btn btn-danger del-input">X</button>
     </div>
     <?php
   }
 }
 
-function generateCategory($recipe)
+function generateCategory($category = '')
 {
-  $categories = ['Entrees', 'Sides', 'Desserts'];
+  $categories = ['Entrees', 'Sides', 'Dessert'];
 
   foreach ($categories as $category) {
-    if ($recipe['category'] == $category) {
+    if ($category == $category) {
       ?>
       <option value="<?= $category ?>" selected><?= $category ?></option>
       <?php
