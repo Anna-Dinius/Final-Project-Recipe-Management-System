@@ -1,3 +1,559 @@
 [
-    null
+    {
+        "id": 1,
+        "name": "Oatmeal Raisin Cookies",
+        "category": "Desserts",
+        "author": "Anna Dinius",
+        "image": "https:\/\/www.simplyrecipes.com\/thmb\/2g1IOS6TYdG_bmyg0hyf0b6RKGY=\/1500x0\/filters:no_upscale():max_bytes(150000):strip_icc()\/Simply-Recipes-Oatmeal-Raisin-Cookies-LEAD-15-2251dafb1a554aafaedf42e797bf2fd0.jpg",
+        "prep_time_hours": "0",
+        "prep_time_minutes": "10",
+        "cook_time_hours": "0",
+        "cook_time_minutes": "15",
+        "total_time": "0 hours 25 minutes",
+        "servings": "12",
+        "ingredients": [
+            "1 cup old-fashioned oats",
+            "3\/4 cup all-purpose flour",
+            "1\/2 teaspoon baking soda",
+            "1\/2 teaspoon ground cinnamon",
+            "1\/4 teaspoon salt",
+            "1\/2 cup unsalted butter, softened",
+            "1\/2 cup granulated sugar",
+            "1\/2 cup packed light-brown sugar",
+            "1 large egg",
+            "1 teaspoon vanilla extract",
+            "1 cup raisins"
+        ],
+        "steps": [
+            "Preheat oven to 350\u00b0F (175\u00b0C). Line baking sheets with parchment paper.",
+            "In a bowl, combine oats, flour, baking soda, cinnamon, and salt.",
+            "In a separate large bowl, cream together butter, granulated sugar, and brown sugar until smooth.",
+            "Beat in egg and vanilla extract until well combined.",
+            "Gradually add the dry ingredients to the wet ingredients, mixing until just combined.",
+            "Stir in raisins.",
+            "Drop rounded tablespoons of dough onto prepared baking sheets.",
+            "Bake for 10-12 minutes or until the edges are golden brown.",
+            "Cool on wire racks before serving."
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Garlic Parmesan Roasted Brussels Sprouts",
+        "category": "Sides",
+        "author": "John Doe",
+        "image": "https:\/\/www.eatwell101.com\/wp-content\/uploads\/2020\/09\/Parmesan-Roasted-Brussels-Sprouts-1.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 25,
+        "total_time": "40 minutes",
+        "servings": "4",
+        "ingredients": [
+            "1 lb Brussels sprouts, halved",
+            "2 tbsp olive oil",
+            "3 cloves garlic, minced",
+            "1\/4 cup grated Parmesan cheese",
+            "Salt and pepper to taste"
+        ],
+        "steps": [
+            "Preheat oven to 400\u00b0F (200\u00b0C).",
+            "Toss Brussels sprouts with olive oil, garlic, salt, and pepper.",
+            "Spread them on a baking sheet and roast for 25 minutes.",
+            "Sprinkle with Parmesan cheese and roast for an additional 5 minutes."
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Vegetarian Chickpea Curry",
+        "category": "Entrees",
+        "author": "Chef Alex",
+        "image": "https:\/\/i2.wp.com\/www.downshiftology.com\/wp-content\/uploads\/2024\/01\/Chickpea-Curry-main.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 20,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 25,
+        "total_time": "45 minutes",
+        "servings": "3",
+        "ingredients": [
+            "2 cans (400g each) chickpeas, drained and rinsed",
+            "1 onion, diced",
+            "2 tomatoes, chopped",
+            "3 cloves garlic, minced",
+            "1 tablespoon curry powder",
+            "1 teaspoon ground cumin",
+            "1 teaspoon turmeric",
+            "1 can (400ml) coconut milk",
+            "Salt and pepper to taste",
+            "Fresh cilantro for garnish",
+            "Cooked basmati rice for serving"
+        ],
+        "steps": [
+            "In a pan, saut\u00e9 diced onions until softened. Add minced garlic and cook for an additional minute.",
+            "Stir in chopped tomatoes, curry powder, cumin, and turmeric. Cook for 5 minutes.",
+            "Add chickpeas and coconut milk. Simmer for 15 minutes. Season with salt and pepper.",
+            "Serve over cooked basmati rice and garnish with fresh cilantro."
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Baked Salmon with Lemon Dill Sauce",
+        "category": "Entrees",
+        "author": "Chef Sophia",
+        "image": "https:\/\/food.fnr.sndimg.com\/content\/dam\/images\/food\/fullset\/2014\/3\/28\/1\/RX-DAISY_Grilled-salmon_s4x3.jpg.rend.hgtvcom.616.462.suffix\/1396370205937.jpeg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 20,
+        "total_time": "30 minutes",
+        "servings": "2",
+        "ingredients": [
+            "2 salmon fillets",
+            "1 lemon, sliced",
+            "2 tablespoons olive oil",
+            "2 teaspoons dried dill",
+            "Salt and pepper to taste",
+            "1\/4 cup Greek yogurt",
+            "1 tablespoon Dijon mustard",
+            "Chopped fresh parsley for garnish"
+        ],
+        "steps": [
+            "Preheat the oven to 400\u00b0F (200\u00b0C).",
+            "Place salmon fillets on a baking sheet. Season with salt, pepper, and dried dill. Drizzle with olive oil.",
+            "Top each fillet with lemon slices. Bake for 20 minutes or until salmon is cooked through.",
+            "In a bowl, mix Greek yogurt and Dijon mustard to prepare the sauce. Serve salmon with the sauce and garnish with chopped parsley."
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Banana Bread",
+        "category": "Desserts",
+        "author": "Grandma Grace",
+        "image": "https:\/\/www.simplyrecipes.com\/thmb\/tR-5eHAZ3lgNR6Yvu3yxdHMNpk8=\/1500x0\/filters:no_upscale():max_bytes(150000):strip_icc()\/Simply-Recipes-Easy-Banana-Bread-LEAD-2-2-63dd39af009945d58f5bf4c2ae8d6070.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 1,
+        "cook_time_minutes": 0,
+        "total_time": "1 hour 15 minutes",
+        "servings": "12",
+        "ingredients": [
+            "3 ripe bananas, mashed",
+            "2 cups all-purpose flour",
+            "1 teaspoon baking soda",
+            "1\/4 teaspoon salt",
+            "1\/2 cup unsalted butter, softened",
+            "1 cup granulated sugar",
+            "2 large eggs",
+            "1 teaspoon vanilla extract",
+            "1\/2 cup buttermilk"
+        ],
+        "steps": [
+            "Preheat oven to 350\u00b0F (175\u00b0C). Grease and flour a 9x5-inch loaf pan.",
+            "In a medium bowl, whisk together flour, baking soda, and salt.",
+            "In a separate large bowl, cream together butter and sugar until light and fluffy.",
+            "Add eggs one at a time, beating well after each addition. Stir in mashed bananas and vanilla extract.",
+            "Gradually add the dry ingredients to the wet ingredients, alternating with buttermilk. Begin and end with the dry ingredients.",
+            "Pour batter into the prepared loaf pan. Bake for 60-70 minutes or until a toothpick inserted into the center comes out clean.",
+            "Allow the banana bread to cool in the pan for 10 minutes before transferring to a wire rack to cool completely."
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Lemon Herb Quinoa Salad",
+        "category": "Sides",
+        "author": "Chef Jane Smith",
+        "image": "https:\/\/img.sndimg.com\/food\/image\/upload\/q_92,fl_progressive,w_1200,c_scale\/v1\/img\/recipes\/65\/13\/1\/tRUzOjMOQdWrIpxVSLTG_139%20lemon%20herb%20quinoa%20fooddotcom.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 15,
+        "total_time": "25 minutes",
+        "servings": "6",
+        "ingredients": [
+            "1 cup quinoa, cooked",
+            "1 cucumber, diced",
+            "1 cup cherry tomatoes, halved",
+            "1\/4 cup fresh parsley, chopped",
+            "Zest and juice of 1 lemon"
+        ],
+        "steps": [
+            "In a bowl, combine cooked quinoa, cucumber, cherry tomatoes, and parsley.",
+            "Add lemon zest and juice, tossing to combine.",
+            "Season with salt and pepper to taste."
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Mushroom and Spinach Stuffed Chicken",
+        "category": "Entrees",
+        "author": "Chef Lisa",
+        "image": "https:\/\/thecozyapron.com\/wp-content\/uploads\/2012\/06\/stuffed-chicken_05-20-12_4_ca.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 25,
+        "total_time": "40 minutes",
+        "servings": "4",
+        "ingredients": [
+            "4 boneless, skinless chicken breasts",
+            "1 cup chopped spinach",
+            "1 cup mushrooms, sliced",
+            "1\/2 cup shredded mozzarella cheese",
+            "2 cloves garlic, minced",
+            "1 teaspoon dried oregano",
+            "Salt and pepper to taste",
+            "2 tablespoons olive oil",
+            "1 cup chicken broth"
+        ],
+        "steps": [
+            "Preheat the oven to 375\u00b0F (190\u00b0C).",
+            "In a bowl, mix chopped spinach, sliced mushrooms, mozzarella cheese, minced garlic, and dried oregano.",
+            "Carefully butterfly each chicken breast and stuff with the spinach-mushroom mixture. Season with salt and pepper.",
+            "In an oven-safe skillet, heat olive oil. Sear stuffed chicken breasts until golden brown on both sides.",
+            "Pour chicken broth into the skillet and transfer it to the preheated oven. Bake for 20 minutes or until chicken is cooked through."
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Mushroom and Spinach Quesadillas",
+        "category": "Entrees",
+        "author": "Chef Carlos",
+        "image": "https:\/\/www.budgetbytes.com\/wp-content\/uploads\/2022\/02\/Spinach-and-Mushroom-Quesadillas-stack.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 10,
+        "total_time": "25 minutes",
+        "servings": "3",
+        "ingredients": [
+            "6 whole wheat tortillas",
+            "2 cups mushrooms, sliced",
+            "2 cups fresh spinach leaves",
+            "1 cup shredded Monterey Jack cheese",
+            "1 tablespoon olive oil",
+            "1 teaspoon cumin",
+            "1\/2 teaspoon chili powder",
+            "Salsa and sour cream for serving"
+        ],
+        "steps": [
+            "In a skillet, heat olive oil over medium heat. Add sliced mushrooms and cook until they release their moisture.",
+            "Add fresh spinach to the skillet and cook until wilted. Season with cumin and chili powder.",
+            "Place a tortilla in the skillet, add a portion of the mushroom and spinach mixture, and sprinkle with shredded Monterey Jack cheese. Top with another tortilla.",
+            "Cook on both sides until the tortilla is golden and the cheese is melted.",
+            "Repeat with the remaining tortillas. Serve with salsa and sour cream."
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Teriyaki Salmon Bowl",
+        "category": "Entrees",
+        "author": "Chef Hiro",
+        "image": "https:\/\/www.eatwell101.com\/wp-content\/uploads\/2021\/02\/Teriyaki-Salmon-Sushi-Bowl-recipe-4.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 15,
+        "total_time": "25 minutes",
+        "servings": "2",
+        "ingredients": [
+            "2 salmon fillets",
+            "1\/4 cup soy sauce",
+            "2 tablespoons honey",
+            "1 tablespoon rice vinegar",
+            "1 teaspoon grated ginger",
+            "2 cups cooked brown rice",
+            "1 cup broccoli florets, steamed",
+            "1 carrot, julienned",
+            "Sesame seeds and green onions for garnish"
+        ],
+        "steps": [
+            "In a bowl, mix soy sauce, honey, rice vinegar, and grated ginger to create the teriyaki sauce.",
+            "Marinate salmon fillets in half of the teriyaki sauce for at least 10 minutes.",
+            "Pan-sear or grill salmon until cooked to your liking.",
+            "Serve salmon over cooked brown rice, topped with steamed broccoli, julienned carrots, and a drizzle of the remaining teriyaki sauce. Garnish with sesame seeds and chopped green onions."
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Roasted Sweet Potato Wedges",
+        "category": "Sides",
+        "author": "Chef Alex Johnson",
+        "image": "https:\/\/i0.wp.com\/www.paleonewbie.com\/wp-content\/uploads\/2014\/11\/paleonewbie-baked-spicy-sweet-potato-fries-1266x850.jpg?fit=1266%2C850&ssl=1",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 30,
+        "total_time": "40 minutes",
+        "servings": "4",
+        "ingredients": [
+            "2 large sweet potatoes, cut into wedges",
+            "2 tbsp olive oil",
+            "1 tsp paprika",
+            "1\/2 tsp cayenne pepper",
+            "Salt and pepper to taste"
+        ],
+        "steps": [
+            "Preheat oven to 425\u00b0F (220\u00b0C).",
+            "Toss sweet potato wedges with olive oil, paprika, cayenne pepper, salt, and pepper.",
+            "Spread on a baking sheet and roast for 30 minutes, turning halfway through."
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Creamy Garlic Mashed Cauliflower",
+        "category": "Sides",
+        "author": "Chef Emily Davis",
+        "image": "https:\/\/www.instrupix.com\/wp-content\/uploads\/2021\/05\/keto-low-carb-side-dish-recipes-for-dinner-mashed-cauliflower.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 20,
+        "total_time": "35 minutes",
+        "servings": "5",
+        "ingredients": [
+            "1 large head of cauliflower, cut into florets",
+            "2 cloves garlic, minced",
+            "2 tbsp butter",
+            "1\/4 cup heavy cream",
+            "Salt and pepper to taste"
+        ],
+        "steps": [
+            "Steam cauliflower until tender, about 15 minutes.",
+            "In a blender, combine cauliflower, garlic, butter, and heavy cream. Blend until smooth.",
+            "Season with salt and pepper."
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Chocolate Chip Cookies",
+        "category": "Desserts",
+        "author": "Baker Betty",
+        "image": "https:\/\/www.budgetbytes.com\/wp-content\/uploads\/2022\/12\/Chocolate-Chip-Cookies-close-2.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 10,
+        "total_time": "25 minutes",
+        "servings": "12",
+        "ingredients": [
+            "2 1\/4 cups all-purpose flour",
+            "1\/2 teaspoon baking soda",
+            "1 cup unsalted butter, room temperature",
+            "1\/2 cup granulated sugar",
+            "1 cup packed light-brown sugar",
+            "1 teaspoon salt",
+            "2 teaspoons pure vanilla extract",
+            "2 large eggs",
+            "2 cups semisweet and\/or milk chocolate chips"
+        ],
+        "steps": [
+            "Preheat oven to 350\u00b0F (175\u00b0C).",
+            "In a small bowl, whisk together the flour and baking soda.",
+            "In a large mixing bowl, cream together the butter, granulated sugar, brown sugar, and salt until light and fluffy.",
+            "Add vanilla extract and eggs; beat well.",
+            "Gradually add the flour mixture to the wet ingredients, mixing until just combined.",
+            "Stir in chocolate chips.",
+            "Drop rounded tablespoons of dough onto ungreased baking sheets.",
+            "Bake for 10 minutes or until golden brown.",
+            "Cool on wire racks before serving."
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Vegetarian Quinoa Stuffed Bell Peppers",
+        "category": "Entrees",
+        "author": "Chef Olivia",
+        "image": "https:\/\/www.eatyourselfskinny.com\/wp-content\/uploads\/2012\/07\/161.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 20,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 25,
+        "total_time": "45 minutes",
+        "servings": "4",
+        "ingredients": [
+            "4 bell peppers, halved and seeds removed",
+            "1 cup quinoa, cooked",
+            "1 can black beans, drained and rinsed",
+            "1 cup corn kernels",
+            "1 cup diced tomatoes",
+            "1 cup shredded cheddar cheese",
+            "1 teaspoon cumin",
+            "1 teaspoon chili powder",
+            "Salt and pepper to taste",
+            "Fresh cilantro for garnish"
+        ],
+        "steps": [
+            "Preheat the oven to 375\u00b0F (190\u00b0C).",
+            "In a bowl, combine cooked quinoa, black beans, corn, diced tomatoes, shredded cheddar cheese, cumin, chili powder, salt, and pepper.",
+            "Stuff each bell pepper half with the quinoa mixture.",
+            "Bake in the preheated oven for 25 minutes or until peppers are tender.",
+            "Garnish with fresh cilantro and serve."
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Chicken Alfredo Pasta",
+        "category": "Entrees",
+        "author": "Chef Maria",
+        "image": "https:\/\/hips.hearstapps.com\/hmg-prod\/images\/chicken-alfredo-index-64ee1026c82a9.jpg?crop=0.9994472084024323xw:1xh;center,top&resize=1200:*",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 15,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 20,
+        "total_time": "35 minutes",
+        "servings": "4",
+        "ingredients": [
+            "8 oz fettuccine pasta",
+            "2 chicken breasts, cooked and sliced",
+            "2 cups heavy cream",
+            "1 cup grated Parmesan cheese",
+            "1\/2 cup unsalted butter",
+            "3 cloves garlic, minced",
+            "Salt and pepper to taste",
+            "Chopped parsley for garnish"
+        ],
+        "steps": [
+            "Cook fettuccine pasta according to package instructions. Drain and set aside.",
+            "In a large skillet, melt butter over medium heat. Add minced garlic and saut\u00e9 until fragrant.",
+            "Pour in the heavy cream, bring to a simmer, and then stir in grated Parmesan cheese until melted.",
+            "Add sliced chicken to the sauce and let it simmer for a few minutes until heated through. Season with salt and pepper to taste.",
+            "Serve the Alfredo sauce over cooked fettuccine pasta. Garnish with chopped parsley."
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Strawberry Shortcake",
+        "category": "Desserts",
+        "author": "Chef Carla",
+        "image": "https:\/\/iambaker.net\/wp-content\/uploads\/2023\/05\/strawberry-shortcake-cake-1.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 20,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 0,
+        "total_time": "20 minutes",
+        "servings": "6",
+        "ingredients": [
+            "1 pound fresh strawberries, hulled and sliced",
+            "1\/4 cup granulated sugar",
+            "2 cups heavy cream",
+            "1\/4 cup powdered sugar",
+            "1 teaspoon vanilla extract",
+            "6 shortcakes, split"
+        ],
+        "steps": [
+            "In a bowl, combine sliced strawberries and granulated sugar. Let sit for 15 minutes.",
+            "In a separate bowl, whip the heavy cream until soft peaks form.",
+            "Add powdered sugar and vanilla extract to whipped cream; continue whipping until stiff peaks form.",
+            "Place a spoonful of strawberries on the bottom half of each shortcake.",
+            "Top with a dollop of whipped cream and place the other half of the shortcake on top.",
+            "Garnish with additional strawberries and serve immediately."
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Caprese Skewers",
+        "category": "Sides",
+        "author": "Chef Michael Rodriguez",
+        "image": "https:\/\/cdn.loveandlemons.com\/wp-content\/uploads\/2021\/08\/caprese-skewers.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 0,
+        "total_time": "10 minutes",
+        "servings": "4",
+        "ingredients": [
+            "Cherry tomatoes",
+            "Fresh mozzarella balls",
+            "Fresh basil leaves",
+            "Balsamic glaze for drizzling"
+        ],
+        "steps": [
+            "Thread a cherry tomato, a mozzarella ball, and a basil leaf onto small skewers.",
+            "Arrange on a serving platter and drizzle with balsamic glaze before serving."
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Vanilla Pudding Parfait",
+        "category": "Desserts",
+        "author": "Pastry Chef Paul",
+        "image": "https:\/\/www.onceuponachef.com\/images\/2013\/06\/banana-pudding-parfaits-1-1-760x552.jpg",
+        "prep_time_hours": 0,
+        "prep_time_minutes": 10,
+        "cook_time_hours": 0,
+        "cook_time_minutes": 10,
+        "total_time": "20 minutes",
+        "servings": "4",
+        "ingredients": [
+            "2 cups whole milk",
+            "1\/2 cup granulated sugar",
+            "1\/4 cup cornstarch",
+            "1\/4 teaspoon salt",
+            "2 teaspoons vanilla extract",
+            "1 cup whipped cream",
+            "4 tablespoons crushed cookies (optional)"
+        ],
+        "steps": [
+            "In a saucepan, whisk together milk, sugar, cornstarch, and salt.",
+            "Cook over medium heat, stirring constantly until the mixture thickens and comes to a boil.",
+            "Remove from heat and stir in vanilla extract. Allow the pudding to cool slightly.",
+            "In serving glasses, layer the vanilla pudding with whipped cream. Repeat the layers.",
+            "Top with crushed cookies if desired.",
+            "Chill in the refrigerator for at least 1 hour before serving."
+        ]
+    },
+    {
+        "id": 18,
+        "ingredients": [
+            "2 boneless, skinless chicken breasts",
+            "2 tablespoons olive oil",
+            "1 lemon, juiced",
+            "2 cloves garlic, minced",
+            "1 teaspoon dried thyme",
+            "Salt and pepper to taste",
+            "Chopped fresh parsley for garnish"
+        ],
+        "steps": [
+            "Preheat the grill to medium-high heat.",
+            "In a bowl, mix olive oil, lemon juice, minced garlic, dried thyme, salt, and pepper.",
+            "Coat chicken breasts with the marinade and grill for 10-12 minutes, turning once, until fully cooked.",
+            "Garnish with chopped parsley before serving."
+        ],
+        "name": "Grilled Lemon Herb Chicken",
+        "category": "Entrees",
+        "author": "Chef Henry",
+        "prep_time_minutes": 10,
+        "prep_time_hours": 0,
+        "cook_time_minutes": 20,
+        "cook_time_hours": 0,
+        "total_time": "30 minutes",
+        "image": "https:\/\/www.feastingathome.com\/wp-content\/uploads\/2021\/06\/Grilled-lemon-Herb-Chicken-17.jpg",
+        "servings": "2"
+    },
+    {
+        "id": 19,
+        "name": "Pasta Aglio e Olio",
+        "author": "Anna Dinius",
+        "category": "Entrees",
+        "image": "https:\/\/img.taste.com.au\/6zwlwQuA\/taste\/2016\/11\/aglio-e-olio-garlic-and-oil-87841-1.jpeg",
+        "prep_time_hours": "0",
+        "prep_time_minutes": "10",
+        "cook_time_hours": "0",
+        "cook_time_minutes": "15",
+        "total_time": "0 hours 25 minutes",
+        "servings": "2",
+        "ingredients": [
+            "200g spaghetti",
+            "4 cloves garlic, thinly sliced",
+            "1\/2 teaspoon red pepper flakes",
+            "1\/4 cup olive oil",
+            "Chopped fresh parsley for garnish",
+            "Grated Parmesan cheese"
+        ],
+        "steps": [
+            "Cook spaghetti according to package instructions. Reserve a cup of pasta water before draining.",
+            "In a pan, saut\\u00e9 thinly sliced garlic and red pepper flakes in olive oil until garlic is golden but not browned.",
+            "Add cooked spaghetti to the pan, tossing to coat with the garlic-infused oil. If needed, add reserved pasta water to achieve desired consistency.",
+            "Garnish with chopped fresh parsley and serve with grated Parmesan cheese."
+        ]
+    }
 ]

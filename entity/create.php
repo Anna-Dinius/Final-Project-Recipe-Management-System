@@ -23,7 +23,7 @@ if (!isset($_SESSION['signedIn'])) {
     $imagePath = '../img/' . basename($_FILES['image']['name']);
     move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
     $image = $imagePath;
-
+    
     $prep_time_hours = (int)$_POST['prep_time_hours'];
     $prep_time_minutes = (int)$_POST['prep_time_minutes'];
     $cook_time_hours = (int)$_POST['cook_time_hours'];

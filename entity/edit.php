@@ -166,6 +166,7 @@ if (!isset($_SESSION['signedIn'])) {
       echo "Transaction failed: " . $e->getMessage();
     }
     //header("Location: ../entity/detail.php?recipe_id=$id");
+
   }
   ?>
 

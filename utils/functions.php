@@ -342,8 +342,6 @@ function displayTime($totalMinutes)
 
     echo $time;
 }
-
-
 function displayUserRows($users)
 {
   // echo count($users);
