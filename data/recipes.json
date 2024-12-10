@@ -1,42 +1,5 @@
-[
-    {
-        "id": 1,
-        "name": "Oatmeal Raisin Cookies",
-        "category": "Desserts",
-        "author": "Anna Dinius",
-        "image": "https:\/\/www.simplyrecipes.com\/thmb\/2g1IOS6TYdG_bmyg0hyf0b6RKGY=\/1500x0\/filters:no_upscale():max_bytes(150000):strip_icc()\/Simply-Recipes-Oatmeal-Raisin-Cookies-LEAD-15-2251dafb1a554aafaedf42e797bf2fd0.jpg",
-        "prep_time_hours": "0",
-        "prep_time_minutes": "10",
-        "cook_time_hours": "0",
-        "cook_time_minutes": "15",
-        "total_time": "0 hours 25 minutes",
-        "servings": "12",
-        "ingredients": [
-            "1 cup old-fashioned oats",
-            "3\/4 cup all-purpose flour",
-            "1\/2 teaspoon baking soda",
-            "1\/2 teaspoon ground cinnamon",
-            "1\/4 teaspoon salt",
-            "1\/2 cup unsalted butter, softened",
-            "1\/2 cup granulated sugar",
-            "1\/2 cup packed light-brown sugar",
-            "1 large egg",
-            "1 teaspoon vanilla extract",
-            "1 cup raisins"
-        ],
-        "steps": [
-            "Preheat oven to 350\u00b0F (175\u00b0C). Line baking sheets with parchment paper.",
-            "In a bowl, combine oats, flour, baking soda, cinnamon, and salt.",
-            "In a separate large bowl, cream together butter, granulated sugar, and brown sugar until smooth.",
-            "Beat in egg and vanilla extract until well combined.",
-            "Gradually add the dry ingredients to the wet ingredients, mixing until just combined.",
-            "Stir in raisins.",
-            "Drop rounded tablespoons of dough onto prepared baking sheets.",
-            "Bake for 10-12 minutes or until the edges are golden brown.",
-            "Cool on wire racks before serving."
-        ]
-    },
-    {
+{
+    "1": {
         "id": 2,
         "name": "Garlic Parmesan Roasted Brussels Sprouts",
         "category": "Sides",
@@ -62,7 +25,7 @@
             "Sprinkle with Parmesan cheese and roast for an additional 5 minutes."
         ]
     },
-    {
+    "2": {
         "id": 3,
         "name": "Vegetarian Chickpea Curry",
         "category": "Entrees",
@@ -94,7 +57,7 @@
             "Serve over cooked basmati rice and garnish with fresh cilantro."
         ]
     },
-    {
+    "3": {
         "id": 4,
         "name": "Baked Salmon with Lemon Dill Sauce",
         "category": "Entrees",
@@ -123,7 +86,7 @@
             "In a bowl, mix Greek yogurt and Dijon mustard to prepare the sauce. Serve salmon with the sauce and garnish with chopped parsley."
         ]
     },
-    {
+    "4": {
         "id": 5,
         "name": "Banana Bread",
         "category": "Desserts",
@@ -156,7 +119,7 @@
             "Allow the banana bread to cool in the pan for 10 minutes before transferring to a wire rack to cool completely."
         ]
     },
-    {
+    "5": {
         "id": 6,
         "name": "Lemon Herb Quinoa Salad",
         "category": "Sides",
@@ -181,7 +144,7 @@
             "Season with salt and pepper to taste."
         ]
     },
-    {
+    "6": {
         "id": 7,
         "name": "Mushroom and Spinach Stuffed Chicken",
         "category": "Entrees",
@@ -212,7 +175,7 @@
             "Pour chicken broth into the skillet and transfer it to the preheated oven. Bake for 20 minutes or until chicken is cooked through."
         ]
     },
-    {
+    "7": {
         "id": 8,
         "name": "Mushroom and Spinach Quesadillas",
         "category": "Entrees",
@@ -242,7 +205,7 @@
             "Repeat with the remaining tortillas. Serve with salsa and sour cream."
         ]
     },
-    {
+    "8": {
         "id": 9,
         "name": "Teriyaki Salmon Bowl",
         "category": "Entrees",
@@ -272,7 +235,7 @@
             "Serve salmon over cooked brown rice, topped with steamed broccoli, julienned carrots, and a drizzle of the remaining teriyaki sauce. Garnish with sesame seeds and chopped green onions."
         ]
     },
-    {
+    "9": {
         "id": 10,
         "name": "Roasted Sweet Potato Wedges",
         "category": "Sides",
@@ -297,7 +260,7 @@
             "Spread on a baking sheet and roast for 30 minutes, turning halfway through."
         ]
     },
-    {
+    "10": {
         "id": 11,
         "name": "Creamy Garlic Mashed Cauliflower",
         "category": "Sides",
@@ -322,7 +285,7 @@
             "Season with salt and pepper."
         ]
     },
-    {
+    "11": {
         "id": 12,
         "name": "Chocolate Chip Cookies",
         "category": "Desserts",
@@ -357,7 +320,7 @@
             "Cool on wire racks before serving."
         ]
     },
-    {
+    "12": {
         "id": 13,
         "name": "Vegetarian Quinoa Stuffed Bell Peppers",
         "category": "Entrees",
@@ -389,7 +352,7 @@
             "Garnish with fresh cilantro and serve."
         ]
     },
-    {
+    "13": {
         "id": 14,
         "name": "Chicken Alfredo Pasta",
         "category": "Entrees",
@@ -419,7 +382,7 @@
             "Serve the Alfredo sauce over cooked fettuccine pasta. Garnish with chopped parsley."
         ]
     },
-    {
+    "14": {
         "id": 15,
         "name": "Strawberry Shortcake",
         "category": "Desserts",
@@ -448,7 +411,7 @@
             "Garnish with additional strawberries and serve immediately."
         ]
     },
-    {
+    "15": {
         "id": 16,
         "name": "Caprese Skewers",
         "category": "Sides",
@@ -471,7 +434,7 @@
             "Arrange on a serving platter and drizzle with balsamic glaze before serving."
         ]
     },
-    {
+    "16": {
         "id": 17,
         "name": "Vanilla Pudding Parfait",
         "category": "Desserts",
@@ -501,7 +464,7 @@
             "Chill in the refrigerator for at least 1 hour before serving."
         ]
     },
-    {
+    "17": {
         "id": 18,
         "ingredients": [
             "2 boneless, skinless chicken breasts",
@@ -529,7 +492,7 @@
         "image": "https:\/\/www.feastingathome.com\/wp-content\/uploads\/2021\/06\/Grilled-lemon-Herb-Chicken-17.jpg",
         "servings": "2"
     },
-    {
+    "18": {
         "id": 19,
         "name": "Pasta Aglio e Olio",
         "author": "Anna Dinius",
@@ -556,4 +519,4 @@
             "Garnish with chopped fresh parsley and serve with grated Parmesan cheese."
         ]
     }
-]
+}

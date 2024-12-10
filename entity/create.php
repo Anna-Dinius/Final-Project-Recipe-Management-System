@@ -124,8 +124,8 @@ if (!isset($_SESSION['signedIn'])) {
       echo "Transaction failed: " . $e->getMessage();
     }
 
-    header("Location: ../entity/index.php");
-    exit;
+    //header("Location: ../entity/index.php");
+    //exit;
   }
   ?>
 

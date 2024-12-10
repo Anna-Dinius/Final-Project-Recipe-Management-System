@@ -4,7 +4,9 @@ include_once('../utils/SQLfunctions.php');
 include_once('../db.php');
 
 session_start();
-
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
 // Fetch the recipes from database
 $recipes = fetchRecipes($db);
 
