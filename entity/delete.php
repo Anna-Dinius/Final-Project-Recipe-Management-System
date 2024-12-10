@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
 require_once('../db.php');
 
 session_start();
@@ -8,24 +9,15 @@ if (!isset($_SESSION['signedIn'])) {
   alert();
   die('You do not have permission to access this page');
 } else {
-  $file = '../data/recipes.json';
-  $content = file_get_contents($file);
-  $recipes = json_decode($content, true);
 
   $id = $_GET['recipe_id'];
-  $recipe = getRecipe($recipes, $id);
+  $recipes = fetchRecipes($db);
+  $recipe = getRecipe($recipes,$id);
 
   $title = 'Delete a Recipe';
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    for ($i = 0; $i < count($recipes); $i++) {
-      if ($recipes[$i]['id'] == $id) {
-        unset($recipes[$i]);
-        file_put_contents('../data/recipes.json', json_encode($recipes, JSON_PRETTY_PRINT));
-        header('Location:../index.php');
-        exit();
-      }
-    }
+    deleteOldRecipe($db, $id));
 
     header("Location: ../entity/index.php");
   }

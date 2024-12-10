@@ -10,4 +10,14 @@
 
 # Presentation
 
-* [Video](https://youtu.be/wLI_ITDXdy4)
+* Will be in other submission
+
+# Admin Credentials
+
+* admin@gmail.com
+* password1!
+
+# User Credentials
+
+* Can make one or use johndoe@gmail.com johndoe
+
