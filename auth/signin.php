@@ -20,7 +20,7 @@ $title = 'Sign In';
 
     <?php
     if (count($_POST) > 0) {
-        $query = $db->prepare('SELECT name,is_admin FROM users WHERE email=? AND password=?');
+        $query = $db->prepare('SELECT name,is_admin,user_ID FROM users WHERE email=? AND password=?');
         $query->execute([$_POST['email'], $_POST['password']]);
 
         if ($query) {
@@ -29,6 +29,7 @@ $title = 'Sign In';
             session_start();
             $_SESSION['signedIn'] = TRUE;
             $_SESSION['name'] = $user['name'];
+            $_SESSION['user_ID'] = $user['user_ID'];
 
             if ($user['is_admin'] == 1) {
                 $_SESSION['admin'] = TRUE;

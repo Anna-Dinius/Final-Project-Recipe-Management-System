@@ -193,6 +193,34 @@ function displayCards($recipes)
   }
 }
 
+function displayFavoriteCards($recipes)
+{
+  for ($i = 0; $i < count($recipes); $i++) {
+    ?>
+    <div class="card">
+      <a href="../entity/detail.php?recipe_id=<?= $recipes[$i]['id'] ?>">
+        <div class="img-div">
+          <img src="<?= $recipes[$i]['image'] ?>">
+        </div>
+
+        <div class="h1-div">
+          <h1 class="text-truncate"><?= $recipes[$i]['name'] ?></h1>
+        </div>
+
+        <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
+      </a>
+
+      <?php
+      if (isset($_SESSION['signedIn'])) { ?>
+        <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
+        <a href="../favorites/delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
+      </div>
+      <?php } ?>
+    </div>
+    <?php
+  }
+}
+
 function displayIngredients($ingredients)
 {
     foreach ($ingredients as $index => $ingredient) {

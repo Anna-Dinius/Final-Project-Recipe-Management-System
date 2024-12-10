@@ -4,16 +4,16 @@ function fetchRecipes($db)
 {
     try {
         // Prepare the SQL query
-        $sql = "SELECT 
-                    recipes.recipe_ID AS id, 
-                    recipes.recipe_name AS name, 
-                    recipes.image, 
+        $sql = "SELECT
+                    recipes.recipe_ID AS id,
+                    recipes.recipe_name AS name,
+                    recipes.image,
                     users.name AS author
-                FROM 
+                FROM
                     recipes
-                INNER JOIN 
-                    users 
-                ON 
+                INNER JOIN
+                    users
+                ON
                     recipes.user_ID = users.user_ID";
 
         // Execute the query
@@ -29,13 +29,62 @@ function fetchRecipes($db)
     }
 }
 
+function fetchFavoriteRecipes($db, $userId)
+{
+    try {
+        // Step 1: Prepare the SQL query to fetch recipe IDs for the user
+        $sqlFavorites = "SELECT recipe_ID FROM favorites WHERE user_ID = :userId";
+
+        // Prepare and execute the favorites query
+        $stmtFavorites = $db->prepare($sqlFavorites);
+        $stmtFavorites->execute(['userId' => $userId]);
+
+        // Fetch all recipe IDs as an array
+        $favoriteRecipeIds = $stmtFavorites->fetchAll(PDO::FETCH_COLUMN);
+
+        // If no favorites, return an empty array
+        if (empty($favoriteRecipeIds)) {
+            return [];
+        }
+
+        // Step 2: Prepare the SQL query to fetch recipe details
+        $sqlRecipes = "SELECT
+                           recipes.recipe_ID AS id,
+                           recipes.recipe_name AS name,
+                           recipes.image,
+                           users.name AS author
+                       FROM
+                           recipes
+                       INNER JOIN
+                           users
+                       ON
+                           recipes.user_ID = users.user_ID
+                       WHERE
+                           recipes.recipe_ID IN (" . implode(',', array_fill(0, count($favoriteRecipeIds), '?')) . ")";
+
+        // Prepare and execute the recipes query
+        $stmtRecipes = $db->prepare($sqlRecipes);
+        $stmtRecipes->execute($favoriteRecipeIds);
+
+        // Fetch all results as an associative array
+        $favoriteRecipes = $stmtRecipes->fetchAll(PDO::FETCH_ASSOC);
+
+        return $favoriteRecipes;
+    } catch (Exception $e) {
+        // Log the error and return an empty array
+        error_log("Error fetching favorite recipes: " . $e->getMessage());
+        return [];
+    }
+}
+
+
 function updateViewCountSQL($db, $recipeID)
 {
     try {
         // Prepare the UPDATE query to increment the view count
         $sql = "UPDATE recipes SET view_count = view_count + 1 WHERE recipe_ID = :recipeID";
         $stmt = $db->prepare($sql);
-        
+
         // Execute the query with the provided recipe ID
         $stmt->execute([':recipeID' => $recipeID]);
     } catch (Exception $e) {
@@ -48,7 +97,7 @@ function getViewCountSQL($db, $recipeID)
     try {
         $sql = "SELECT view_count FROM recipes  WHERE recipe_ID = :recipeID";
         $stmt = $db->prepare($sql);
-        
+
         $stmt->execute([':recipeID' => $recipeID]);
         $view = $stmt->fetch();
 
@@ -261,5 +310,3 @@ function deleteOldImage($db, $recipeID)
         return false;
     }
 }
-
-

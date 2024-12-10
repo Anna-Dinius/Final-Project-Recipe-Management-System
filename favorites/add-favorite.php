@@ -11,9 +11,9 @@ if (!isset($_SESSION['signedIn'])) {
 } else {
 
   $id = $_GET['recipe_id'];
-  
-  $recipies = fetchRecipies($db);
-  $getRecipie($recipies, $id);
+
+  $recipes = fetchRecipes($db);
+  $recipe = getRecipe($recipes, $id);
 
   $title = 'Add a Recipe';
 
@@ -67,7 +67,7 @@ if (!isset($_SESSION['signedIn'])) {
           <h2>Are you sure you want to add the <?= $recipe['name']; ?> recipe to your favorites?</h2>
 
           <div class="d-flex btns" id="btn-box-<?= $recipe['id'] ?>">
-            <form method="POST" action="delete.php?recipe_id=<?= $_GET['recipe_id'] ?>">
+            <form method="POST" action="index.php">
               <a href="index.php" class="btn btn-secondary update-btn">Cancel</a>
               <button type="submit" class="btn btn-secondary update-btn">Add</button>
             </form>

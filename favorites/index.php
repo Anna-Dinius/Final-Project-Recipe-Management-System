@@ -1,10 +1,11 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
+include_once('../db.php');
 
 session_start();
 
-//INSERT SQL HERE
-//Pull each recipe_ID that matches with the user_ID, and add them to the array $recipies
+$recipes = fetchFavoriteRecipes($db, $_SESSION['user_ID']);
 
 $title = 'Favorites';
 
@@ -23,35 +24,24 @@ $title = 'Favorites';
 	</nav>
 
 	<main>
-
+		<div class="d-flex ms-3 buttons">
+			<a href="../entity/index.php" id="index-btn" class="btn btn-secondary update-btn">
+				Back to Index
+			</a>
+		</div>
 		<?php if (count($recipes) > 0) { ?>
 			<div id="content">
-				<?php
-        for ($i = 0; $i < count($recipes); $i++) {
-          ?>
-          <div class="card">
-            <a href="../entity/detail.php?recipe_id=<?= $recipes[$i]['id'] ?>">
-              <div class="img-div">
-                <img src="<?= $recipes[$i]['image'] ?>">
-              </div>
-
-              <div class="h1-div">
-                <h1 class="text-truncate"><?= $recipes[$i]['name'] ?></h1>
-              </div>
-
-              <p class="author">Author: <?= $recipes[$i]['author'] ?></p>
-            </a>
-
-              <div class="d-flex btns" id="btn-box-<?= $recipes[$i]['id'] ?>">
-                <a href="delete.php?recipe_id=<?= $recipes[$i]['id'] ?>" class="btn btn-danger btn-delete">Delete</a>
-              </div>
-            <?php } ?>
-          </div>
-          <?php
-        } else {
+				<?php displayFavoriteCards($recipes); ?>
+			</div>
+		<?php } else {
 			?>
 			<div class="no-recipes">
 				<h1>No recipes to display.</h1>
+
+				<?php if (!isset($_SESSION['signedIn'])) { ?>
+					<p><a href="../auth/signin.php">Sign in</a> or <a href="../auth/signup.php">sign up</a> to add the first recipe.
+					</p>
+				<?php } ?>
 			</div>
 		<?php } ?>
 	</main>

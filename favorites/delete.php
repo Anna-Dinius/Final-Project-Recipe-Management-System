@@ -1,5 +1,6 @@
 <?php
 include_once('../utils/functions.php');
+include_once('../utils/SQLfunctions.php');
 require_once('../db.php');
 
 session_start();
@@ -9,13 +10,21 @@ if (!isset($_SESSION['signedIn'])) {
   die('You do not have permission to access this page');
 } else {
 
-  $id = $_GET['recipe_id'];
-  $recipe = getRecipe($recipes, $id);
+  $recipe_id = $_GET['recipe_id'];
+  $recipes = fetchRecipes($db);
+  $recipe = getRecipe($recipes, $recipe_id);
+  $user_id = $_SESSION['user_ID'];
 
   $title = 'Delete a Favorite Recipe';
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //implement SQL queries to remove user_ID and recipe_ID from favorites table
+    $sql = "DELETE FROM favorites WHERE user_ID = :userID AND recipe_ID = :recipeID";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute([
+      'userID' => $user_id,
+      'recipeID' => $recipe_id
+    ]);
 
     header("Location: ../favorites/index.php");
   }

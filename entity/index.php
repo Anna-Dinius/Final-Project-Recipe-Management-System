@@ -31,10 +31,16 @@ $title = 'Recipes';
 		//Displays Create button if user is signed in
 		if (isset($_SESSION['signedIn'])) {
 			?>
-			<div class="d-flex ms-3 buttons">
+			<div class="d-flex justify-content-center gap-3">
 				<div id="create">
 					<a href="create.php" id="create-btn" class="btn btn-primary">
 						Create a Recipe
+					</a>
+				</div>
+
+				<div id="favorites">
+					<a href="../favorites/index.php" id="favorites-btn" class="btn btn-secondary update-btn">
+						Go to Favorites
 					</a>
 				</div>
 
