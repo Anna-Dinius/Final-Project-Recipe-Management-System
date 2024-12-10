@@ -20,11 +20,13 @@ $title = 'Recipes';
 </head>
 
 <body>
+
 	<nav class="navbar navbar-expand-lg navbar-light mb-2 turqoise">
 		<?= getNav(); ?>
 	</nav>
 
 	<main>
+
 		<?php
 		//Displays Create button if user is signed in
 		if (isset($_SESSION['signedIn'])) {
@@ -52,6 +54,7 @@ $title = 'Recipes';
 					<div>
 						<a href="../admin/admin.php" class="btn btn-secondary manage-users">Manage Users</a>
 					</div>
+
 				<?php } ?>
 			</div>
 		<?php } ?>
@@ -71,6 +74,7 @@ $title = 'Recipes';
 				<?php } ?>
 			</div>
 		<?php } ?>
+
 	</main>
 </body>
 
