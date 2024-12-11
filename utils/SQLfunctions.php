@@ -32,22 +32,17 @@ function fetchRecipes($db)
 function fetchFavoriteRecipes($db, $userId)
 {
     try {
-        // Step 1: Prepare the SQL query to fetch recipe IDs for the user
         $sqlFavorites = "SELECT recipe_ID FROM favorites WHERE user_ID = :userId";
 
-        // Prepare and execute the favorites query
         $stmtFavorites = $db->prepare($sqlFavorites);
         $stmtFavorites->execute(['userId' => $userId]);
 
-        // Fetch all recipe IDs as an array
         $favoriteRecipeIds = $stmtFavorites->fetchAll(PDO::FETCH_COLUMN);
 
-        // If no favorites, return an empty array
         if (empty($favoriteRecipeIds)) {
             return [];
         }
 
-        // Step 2: Prepare the SQL query to fetch recipe details
         $sqlRecipes = "SELECT
                            recipes.recipe_ID AS id,
                            recipes.recipe_name AS name,
@@ -62,16 +57,13 @@ function fetchFavoriteRecipes($db, $userId)
                        WHERE
                            recipes.recipe_ID IN (" . implode(',', array_fill(0, count($favoriteRecipeIds), '?')) . ")";
 
-        // Prepare and execute the recipes query
         $stmtRecipes = $db->prepare($sqlRecipes);
         $stmtRecipes->execute($favoriteRecipeIds);
 
-        // Fetch all results as an associative array
         $favoriteRecipes = $stmtRecipes->fetchAll(PDO::FETCH_ASSOC);
 
         return $favoriteRecipes;
     } catch (Exception $e) {
-        // Log the error and return an empty array
         error_log("Error fetching favorite recipes: " . $e->getMessage());
         return [];
     }
