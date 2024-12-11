@@ -8,9 +8,9 @@
 
 * Owen Newberry
 
-# Presentation
+# Presentation Link
 
-* Will be in other submission
+* https://www.youtube.com/watch?v=SpBJetz3p_U
 
 # Admin Credentials
 
@@ -19,5 +19,6 @@
 
 # User Credentials
 
-* Can make one or use johndoe@gmail.com johndoe
+* Can make one
+* Or use the email johndoe@gmail.com and password johndoe
 
